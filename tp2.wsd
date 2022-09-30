@@ -1,0 +1,78 @@
+@startuml classe
+abstract "Command" {
+    app : Application
+    editeur : Editeur
+    +Command(app, editeur)
+    +execute()
+}
+
+class "Copier" {
+}
+
+class "Couper" {
+}
+
+class "Coller" {
+}
+
+class "Editeur" {
+    buffer : StringBuffer
+    curseur : Selection
+    +getCurrentSelection() : void
+    +annulerSelection() : void
+    +modifierSelection(texte : String) : void
+}
+class "Selection" {
+    startSelection : Iterator
+    endSelection : Iterator
+}
+
+class "Application" {
+    editeur : Editeur
+    interface : Actionneur
+    clipboard : StringBuffer
+}
+
+class "Actionneur" {
+    command : Command
+    +lancerCommande() : void()
+}
+
+Editeur *-->"1" Selection
+Actionneur -->"1" Command
+Application *-->"1" Editeur
+Application *-->"0..n" Actionneur
+Copier -->"1" Editeur
+Couper -->"1" Editeur
+Coller -->"1" Editeur
+Command <|-- Copier
+Command <|-- Couper
+Command <|-- Coller
+@enduml
+
+@startuml sequence
+actor Utilisateur as U
+actor Application as App
+actor Actionneur as A
+actor "Commande Couper" as CC
+actor "Commander Coller" as CCo
+actor Editeur as E
+U -> App : Tape du texte dans l'éditeur de texte
+App -> E : Envcie le texte dans la zone de travail
+App -> U : Affiche le texte entré pour l'utilisateur
+U -> A : Appuie sur un raccourci pour exécuter la commande "Couper"
+A -> CC : Utilise la commande liée au raccourci pressé
+CC -> U : Propose de sélectionner un intervalle
+U -> CC : Sélectionne la zone de texte à exploiter
+CC -> E : Copie l'intervalle sélectionné dans le buffer
+CC -> App : Envoie la copie dans le clipboard
+CC -> E : Supprime l'intervalle sélectionné dans le buffer
+CC -> App : Fin de l'exécution de la commande "Couper"
+App -> U : Raffraichis l'affichage 
+U -> A : Appuie sur un raccourci pour exécuter la commande "Coller"
+A -> CCo : Utilise la commande liée au raccourci pressé
+CCo -> App : Va chercher la sélection dans le clipboard
+CCo -> E : Insère la sélection du clipboard dans la zone de travail
+CCo -> App : Fin de l'exécution de la commande "Coller"
+App -> U : Raffraichis l'affichage
+@enduml
