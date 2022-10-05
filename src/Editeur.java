@@ -7,9 +7,22 @@ public class Editeur{
         this.curseur = new Selection(buffer);
     }
 
+    public StringBuffer getBuffer() {
+        return this.buffer;
+    }
+
+    public void setBuffer(String s) {
+        this.buffer.append(s);
+        curseur.refresh(buffer);
+    }
+
+    public Selection getCurseur() {
+        return curseur;
+    }
+
     public String getSelection(){
         return buffer.substring(curseur.getLeft().getIndex(),
-        curseur.getRight().getIndex());
+        curseur.getRight().getIndex()+1);
     }
 
     public void supprimerSelection(){

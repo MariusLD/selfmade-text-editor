@@ -7,6 +7,10 @@ public class Selection {
     private CharacterIterator left;
     private CharacterIterator right;
     public Selection(StringBuffer sb) {
+        refresh(sb);
+    }
+
+    public void refresh(StringBuffer sb) {
         start = new StringCharacterIterator(sb.toString());
         start.first();
         end = new StringCharacterIterator(sb.toString());
@@ -31,13 +35,13 @@ public class Selection {
         return right;
     }
 
-    public void keyTypedLeft(KeyEvent event) {
-        if (event.getKeyChar() == KeyEvent.VK_LEFT) {
+    public boolean keyTypedLeft(String s) {
+        if (s.equals("P")) {
             if (left.getIndex() != start.getIndex()) {
                 left.previous();
             }
-        }
-        if (event.getKeyChar() == KeyEvent.VK_RIGHT) {
+            return false;
+        } else if (s.equals("N")) {
             if (left.getIndex() != end.getIndex()) {
                 left.next();
                 if (left.getIndex() > right.getIndex()) {
@@ -46,11 +50,16 @@ public class Selection {
                     right = it;
                 }
             }
+            return false;
+        } else if (s.equals("D")) {
+            return true;
+        } else {
+            return false;
         }
     }
 
-    public void keyTypedRight(KeyEvent event) {
-        if (event.getKeyChar() == KeyEvent.VK_LEFT) {
+    public boolean keyTypedRight(String s) {
+        if (s.equals("P")) {
             if (right.getIndex() != start.getIndex()) {
                 right.previous();
                 if (left.getIndex() > right.getIndex()) {
@@ -59,11 +68,32 @@ public class Selection {
                     right = it;
                 }
             }
-        }
-        if (event.getKeyChar() == KeyEvent.VK_RIGHT) {
-            if (left.getIndex() != end.getIndex()) {
+            return false;
+        } else if (s.equals("N")) {
+            if (right.getIndex() != end.getIndex()) {
                 right.next();
             }
+            return false;
+        } else if (s.equals("D")) {
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    public void affichageDroite(StringBuffer sb) {
+        System.out.println(sb.toString());
+        for (int i = 0; i < right.getIndex(); i++) {
+            System.out.print(" ");
+        }
+        System.out.println("^");
+    }
+
+    public void affichageGauche(StringBuffer sb) {
+        System.out.println(sb.toString());
+        for (int i = 0; i < left.getIndex(); i++) {
+            System.out.print(" ");
+        }
+        System.out.println("^");
     }
 }

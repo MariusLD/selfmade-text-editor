@@ -4,43 +4,39 @@ import java.awt.EventQueue;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class Application implements KeyListener{
-    private Editeur editeur;
+import java.util.Scanner;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+public class Application  {
+    private static Editeur editeur;
     private Actionneur actionneur;
-    private String clipboard;
+    private static String clipboard;
 
-    public void keyPressed(KeyEvent e) {}
-    public void keyReleased(KeyEvent e) {}
-    public void keyTyped(KeyEvent e) {}
+    private static Command copie;
+    private static Command colle;
 
-    public void GUI() {
-        JFrame frame = new JFrame("Notre éditeur de texte");
-        JPanel content = new JPanel();
-        JTextArea textField;
-        frame.setContentPane(content);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
-        textField = new JTextArea();
-        textField.setLineWrap(true);
-        content.add(textField);
-        JPanel jp = new JPanel();
-        JButton ctrlC = new JButton("Ctrl+C");
-        JButton ctrlX = new JButton("Ctrl+X");
-        JButton ctrlV = new JButton("Ctrl+V");
-        JButton ctrlZ = new JButton("Ctrl+Z");
-        jp.add(ctrlC);
-        jp.add(ctrlX);
-        jp.add(ctrlV);
-        jp.add(ctrlZ);
-        content.add(jp);
-        frame.setSize(450, 200);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+    private void show() {
+        JFrame f = new JFrame("Notre éditeur de texte");
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        ApplicationPannel ap = new ApplicationPannel();
+        f.add(ap);
+
+        f.setContentPane(ap);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        f.setVisible(true);
+        f.setSize(600,600);
     }
-    public Application(){
+
+    public Application() {
         editeur = new Editeur();
         actionneur = new Actionneur();
         clipboard = new String();
+        copie = new Copier(this, editeur);
+        colle = new Coller(this, editeur);
     }
 
     public String getClipboard() {
@@ -49,5 +45,71 @@ public class Application implements KeyListener{
 
     public void setClipboard(String texte) {
         clipboard = texte;
+    }
+
+    private static class ApplicationPannel extends JPanel implements KeyListener {
+        Scanner sc = new Scanner(System.in);
+        JTextField textField = new JTextField();
+        public ApplicationPannel() {
+            this.addKeyListener(this);
+            this.setFocusable(true);
+            this.requestFocusInWindow();
+            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+            textField.setEditable(false);
+            this.add(textField);
+            textField.setText("");
+            JPanel jp = new JPanel();
+            JButton ctrlC = new JButton("Ctrl+C");
+            ctrlC.addActionListener(e -> {
+                System.out.println("Choisis la borne droite de la limite de copie, P pour previous et N pour next D pour done");
+                String temp = "";
+                while (!editeur.getCurseur().keyTypedRight(temp)) {
+                    editeur.getCurseur().affichageDroite(editeur.getBuffer());
+                    temp = sc.nextLine();
+                }
+                System.out.println("Choisis la borne gauche de la limite de copie, P pour previous et N pour next D pour done");
+                temp = "";
+                while (!editeur.getCurseur().keyTypedLeft(temp)) {
+                    editeur.getCurseur().affichageGauche(editeur.getBuffer());
+                    temp = sc.nextLine();
+                }
+                copie.execute();
+            });
+            JButton ctrlX = new JButton("Ctrl+X");
+            JButton ctrlV = new JButton("Ctrl+V");
+            ctrlV.addActionListener(e ->  {
+                colle.execute();
+                textField.setText(editeur.getBuffer() + clipboard);
+            });
+            JButton ctrlZ = new JButton("Ctrl+Z");
+            jp.add(ctrlC);
+            jp.add(ctrlX);
+            jp.add(ctrlV);
+            jp.add(ctrlZ);
+            this.add(jp);
+        }
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            editeur.setBuffer(String.valueOf(e.getKeyChar()));
+            textField.setText(editeur.getBuffer().toString());
+        }
+
+        @Override
+        public void keyTyped(KeyEvent e) {
+        }
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+        }
+    }
+
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new Application().show();
+            }
+        });
     }
 }
