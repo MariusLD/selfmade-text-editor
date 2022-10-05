@@ -7,5 +7,6 @@ public class Copier extends Command{
     @Override
     public void execute(){
         getApplication().setClipboard(getEditeur().getSelection());
+        getEditeur().getCurseur().refresh(getEditeur().getBuffer());
     }
 }

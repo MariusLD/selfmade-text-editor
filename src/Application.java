@@ -16,6 +16,7 @@ public class Application  {
 
     private static Command copie;
     private static Command colle;
+    private static Command coupe;
 
     private void show() {
         JFrame f = new JFrame("Notre éditeur de texte");
@@ -37,6 +38,7 @@ public class Application  {
         clipboard = new String();
         copie = new Copier(this, editeur);
         colle = new Coller(this, editeur);
+        coupe = new Couper(this, editeur);
     }
 
     public String getClipboard() {
@@ -48,7 +50,6 @@ public class Application  {
     }
 
     private static class ApplicationPannel extends JPanel implements KeyListener {
-        Scanner sc = new Scanner(System.in);
         JTextField textField = new JTextField();
         public ApplicationPannel() {
             this.addKeyListener(this);
@@ -61,7 +62,33 @@ public class Application  {
             JPanel jp = new JPanel();
             JButton ctrlC = new JButton("Ctrl+C");
             ctrlC.addActionListener(e -> {
-                System.out.println("Choisis la borne droite de la limite de copie, P pour previous et N pour next D pour done");
+                propositionSelection();
+                copie.execute();
+            });
+            JButton ctrlX = new JButton("Ctrl+X");
+            ctrlX.addActionListener(e-> {
+                propositionSelection();
+                coupe.execute();
+                textField.setText(editeur.getBuffer().toString());
+            });
+            JButton ctrlV = new JButton("Ctrl+V");
+            ctrlV.addActionListener(e ->  {
+                System.out.println("Pour une insertion du texte à coller, choisir le même emplacement pour les bornes");
+                propositionSelection();
+                colle.execute();
+                textField.setText(editeur.getBuffer().toString());
+            });
+            JButton ctrlZ = new JButton("Ctrl+Z");
+            jp.add(ctrlC);
+            jp.add(ctrlX);
+            jp.add(ctrlV);
+            jp.add(ctrlZ);
+            this.add(jp);
+        }
+        
+        public static void propositionSelection() {
+            Scanner sc = new Scanner(System.in);
+            System.out.println("Choisis la borne droite de la limite de copie, P pour previous et N pour next D pour done");
                 String temp = "";
                 while (!editeur.getCurseur().keyTypedRight(temp)) {
                     editeur.getCurseur().affichageDroite(editeur.getBuffer());
@@ -73,20 +100,6 @@ public class Application  {
                     editeur.getCurseur().affichageGauche(editeur.getBuffer());
                     temp = sc.nextLine();
                 }
-                copie.execute();
-            });
-            JButton ctrlX = new JButton("Ctrl+X");
-            JButton ctrlV = new JButton("Ctrl+V");
-            ctrlV.addActionListener(e ->  {
-                colle.execute();
-                textField.setText(editeur.getBuffer() + clipboard);
-            });
-            JButton ctrlZ = new JButton("Ctrl+Z");
-            jp.add(ctrlC);
-            jp.add(ctrlX);
-            jp.add(ctrlV);
-            jp.add(ctrlZ);
-            this.add(jp);
         }
 
         @Override
