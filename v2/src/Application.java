@@ -11,14 +11,13 @@ import java.awt.event.ActionListener;
 
 public class Application  {
     private static Editeur editeur;
-    private Actionneur actionneur;
     private static String clipboard;
 
     private static Command copie;
     private static Command colle;
     private static Command coupe;
     private static Command undo;
-    private static Command redo;
+    private static Command redo;     
 
     private void show() {
         JFrame f = new JFrame("Notre éditeur de texte");
@@ -36,7 +35,6 @@ public class Application  {
 
     public Application() {
         editeur = new Editeur();
-        actionneur = new Actionneur();
         clipboard = new String();
         copie = new Copier(this, editeur);
         colle = new Coller(this, editeur);
@@ -55,6 +53,7 @@ public class Application  {
 
     private static class ApplicationPannel extends JPanel implements KeyListener {
         JTextField textField = new JTextField();
+        private JButton last = new JButton("Dernier bouton pressé");
         public ApplicationPannel() {
             this.addKeyListener(this);
             this.setFocusable(true);
@@ -68,12 +67,14 @@ public class Application  {
             ctrlC.addActionListener(e -> {
                 propositionSelection();
                 copie.execute();
+                last = ctrlC;
             });
             JButton ctrlX = new JButton("Ctrl+X");
             ctrlX.addActionListener(e-> {
                 propositionSelection();
                 coupe.execute();
                 textField.setText(editeur.getBuffer().toString());
+                last = ctrlX;
             });
             JButton ctrlV = new JButton("Ctrl+V");
             ctrlV.addActionListener(e ->  {
@@ -81,22 +82,29 @@ public class Application  {
                 propositionSelection();
                 colle.execute();
                 textField.setText(editeur.getBuffer().toString());
+                last = ctrlV;
             });
             JButton ctrlZ = new JButton("<--");
             ctrlZ.addActionListener(e -> {
                 undo.execute();
                 textField.setText(editeur.getBuffer().toString());
+                last = ctrlZ;
             });
             JButton ctrlF = new JButton("-->");
             ctrlF.addActionListener(e -> {
                 redo.execute();
                 textField.setText(editeur.getBuffer().toString());
+                last = ctrlF;
+            });
+            last.addActionListener(e -> {
+                last.doClick();
             });
             jp.add(ctrlC);
             jp.add(ctrlX);
             jp.add(ctrlV);
             jp.add(ctrlZ);
             jp.add(ctrlF);
+            jp.add(last);
             this.add(jp);
         }
         
