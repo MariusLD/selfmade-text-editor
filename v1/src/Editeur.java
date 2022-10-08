@@ -39,5 +39,6 @@ public class Editeur{
             buffer.replace(curseur.getLeft().getIndex(),
             curseur.getRight().getIndex(), texte);
         }
+        curseur.refresh(buffer);
     }
 }
