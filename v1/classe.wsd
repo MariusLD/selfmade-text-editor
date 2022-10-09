@@ -3,13 +3,10 @@ class "Application"{
     -clipboard : String
     -editeur : Editeur
     -fenetre : Fenetre
-    -mode : String
     +Application() <<constructor>>
     +getClipboard() : String
     +getFenetre() : Fenetre
-    +getMode() : String
     +setClipboard(clipboard : String) : void
-    +setMode(mode : String) : void
     +run() : void
 }
 
@@ -39,10 +36,12 @@ class "Fenetre"{
 class "Actionneur"{
     -application : Application
     -fenetre : Fenetre
+    -mode : String
     +Actionneur(application : Application, fenetre : Fenetre) <<constructor>>
     +keyPressed(e : KeyEvent) : void
     +keyReleased(e : KeyEvent) : void
     +keyTyped(e : KeyEvent) : void
+    +getMode() : String
     -isPrintableChar(c : char) : boolean
 }
 

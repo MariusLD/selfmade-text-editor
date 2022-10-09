@@ -10,6 +10,7 @@ public class Actionneur extends KeyAdapter {
 
     private Application application;
     private Fenetre fenetre;
+    private String mode;
 
     /**
      * Constructeur de la classe Actionneur.
@@ -19,12 +20,13 @@ public class Actionneur extends KeyAdapter {
     public Actionneur(Application application, Fenetre fenetre) {
         this.application = application;
         this.fenetre = fenetre;
+        this.mode = "input";
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-        if(application.getMode() == "input"){
+        if(mode == "input"){
             if(keyCode == KeyEvent.VK_LEFT){
                 new DeplacerCurseur(application, application.getEditeur(), 'l').execute();
                 fenetre.refreshSelectionHighlight();
@@ -46,10 +48,10 @@ public class Actionneur extends KeyAdapter {
                 fenetre.refreshCursorHighlight();
             }
             else if(keyCode == KeyEvent.VK_ESCAPE){
-                application.setMode("commande");
+                mode = "commande";
             }
         }
-        else if(application.getMode() == "commande"){
+        else if(mode == "commande"){
             if(keyCode == KeyEvent.VK_C){
                 new Copier(application, this.application.getEditeur()).execute();
                 fenetre.refreshText();
@@ -86,15 +88,15 @@ public class Actionneur extends KeyAdapter {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(application.getMode() == "commande" && e.getKeyCode() == KeyEvent.VK_ESCAPE){
-            application.setMode("input");
+        if(mode == "commande" && e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            mode = "input";
         }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         char keyChar = e.getKeyChar();
-        if(application.getMode() == "input"){
+        if(mode == "input"){
             if(isPrintableChar(keyChar) || keyChar == KeyEvent.VK_ENTER){
                 new Ecrire(application, application.getEditeur(), keyChar).execute();
                 fenetre.refreshText();
@@ -114,8 +116,16 @@ public class Actionneur extends KeyAdapter {
     }
 
     /**
+     * Permet de récupérer le mode.
+     * @return le mode.
+     */
+    public String getMode() {
+        return mode;
+    }
+
+    /**
      * Permet de savoir si un caractère est imprimable.
-     * écrit par OscarRyz, disponnible sur https://stackoverflow.com/a/418560/17288453
+     * écrit par OscarRyz, disponible sur https://stackoverflow.com/a/418560/17288453
      * @param c le caractère.
      * @return true si le caractère est imprimable, false sinon.
      */

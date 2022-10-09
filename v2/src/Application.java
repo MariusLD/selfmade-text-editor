@@ -11,7 +11,6 @@ public class Application implements Runnable {
     private String clipboard;
     private Editeur editeur;
     private Fenetre fenetre;
-    private String mode;
 
     private Stack<Memento> passe;
     private Stack<Memento> future;
@@ -23,7 +22,6 @@ public class Application implements Runnable {
         this.editeur = new Editeur();
         this.fenetre = new Fenetre(this);
         this.clipboard = "";
-        this.mode = "input";
         this.passe = new Stack<Memento>();
         this.future = new Stack<Memento>();
     }
@@ -53,14 +51,6 @@ public class Application implements Runnable {
     }
 
     /**
-     * Permet de récupérer le mode.
-     * @return le mode.
-     */
-    public String getMode() {
-        return mode;
-    }
-
-    /**
      * Permet de récupérer la pile des états précédents.
      * @return la pile des états précédents.
      */
@@ -82,14 +72,6 @@ public class Application implements Runnable {
      */
     public void setClipboard(String clipboard) {
         this.clipboard = clipboard;
-    }
-
-    /**
-     * Permet de modifier le mode.
-     * @param mode le nouvel mode.
-     */
-    public void setMode(String mode) {
-        this.mode = mode;
     }
 
     /**

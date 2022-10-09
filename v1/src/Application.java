@@ -4,12 +4,11 @@ package src;
  * Classe au centre de l'application.
  * C'est elle qu'il faut run dans le main.
  */
-public class Application implements Runnable{
+public class Application implements Runnable {
     
     private String clipboard;
     private Editeur editeur;
     private Fenetre fenetre;
-    private String mode;
 
     /**
      * Constructeur de la classe Application.
@@ -18,7 +17,6 @@ public class Application implements Runnable{
         this.editeur = new Editeur();
         this.fenetre = new Fenetre(this);
         this.clipboard = "";
-        this.mode = "input";
     }
 
     /**
