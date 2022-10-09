@@ -2,19 +2,24 @@ package src;
 
 import java.awt.event.*;
 
-
+/**
+ * Classe qui permet de gérer les actions de l'utilisateur.
+ * C'est elle qui va créer les commandes et les exécuter.
+ */
 public class Actionneur extends KeyAdapter {
-
-    //has two fields, application and fenetre
 
     private Application application;
     private Fenetre fenetre;
 
+    /**
+     * Constructeur de la classe Actionneur.
+     * @param application l'application.
+     * @param fenetre la fenêtre.
+     */
     public Actionneur(Application application, Fenetre fenetre) {
         this.application = application;
         this.fenetre = fenetre;
     }
-
 
     @Override
     public void keyPressed(KeyEvent e) {
@@ -108,7 +113,12 @@ public class Actionneur extends KeyAdapter {
         }
     }
 
-    // https://stackoverflow.com/a/418560/17288453
+    /**
+     * Permet de savoir si un caractère est imprimable.
+     * écrit par OscarRyz, disponnible sur https://stackoverflow.com/a/418560/17288453
+     * @param c le caractère.
+     * @return true si le caractère est imprimable, false sinon.
+     */
     private boolean isPrintableChar(char c) {
         Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
         return !Character.isISOControl(c) &&

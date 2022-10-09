@@ -67,7 +67,7 @@ class "Editeur"{
     +getCurseur() : int
     +getSelection() : Selection
     +writeChar(c : char) : void
-    +deleteChar(position : char) : void
+    +deleteChar(direction : char) : void
     +moveCurseur(direction : char) : void
     +moveSelection(direction : char) : void
     +resetSelection() : void
@@ -111,23 +111,31 @@ class "Couper"{
 }
 
 class "DeplacerCurseur"{
+    -direction : char
     +DeplacerCurseur(application : Application, editeur : Editeur, direction : char) <<constructor>>
     +execute() : void
+    +getDirection() : char
 }
 
 class "DeplacerSelection"{
+    -direction : char
     +DeplacerSelection(application : Application, editeur : Editeur, direction : char) <<constructor>>
     +execute() : void
+    +getDirection() : char
 }
 
 class "Ecrire"{
+    -c : char
     +Ecrire(application : Application, editeur : Editeur, c : char) <<constructor>>
     +execute() : void
+    +getChar() : char
 }
 
 class "Supprimer"{
-    +Supprimer(application : Application, editeur : Editeur, position : char) <<constructor>>
+    -direction : char
+    +Supprimer(application : Application, editeur : Editeur, direction : char) <<constructor>>
     +execute() : void
+    +getDirection() : char
 }
 
 class "Annuler"{

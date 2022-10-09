@@ -6,9 +6,13 @@ import javax.swing.text.Highlighter.HighlightPainter;
 
 import java.awt.*;
 
+/**
+ * Classe au centre de l'application.
+ * Elle gère l'affichage.
+ */
 public class Fenetre {
-    private Application application;
 
+    private Application application;
     private JTextArea textArea;
 
     private Highlighter highlighter;
@@ -19,44 +23,82 @@ public class Fenetre {
     private Object selectionTag = null;
     private Object cursorTag = null;
 
+    /**
+     * Constructeur de la classe Fenetre.
+     * @param application l'application.
+     */
     public Fenetre(Application application) {
         this.application = application;
         this.textArea = new JTextArea();
         this.highlighter = textArea.getHighlighter();
     }
 
+    /**
+     * Permet d'obtenir l'application.
+     * @return l'application.
+     */
     public Application getApplication() {
         return application;
     }
 
+    /**
+     * Permet d'obtenir la zone de texte.
+     * @return la zone de texte.
+     */
     public JTextArea getTextArea() {
         return textArea;
     }
 
+    /**
+     * Permet d'obtenir le highlighter.
+     * @return le highlighter.
+     */
     public Highlighter getHighlighter() {
         return highlighter;
     }
 
+    /**
+     * Permet d'obtenir le painter de la sélection.
+     * @return le painter de la sélection.
+     */
     public HighlightPainter getSelectionPainter() {
         return selectionPainter;
     }
 
+    /**
+     * Permet d'obtenir le painter du curseur.
+     * @return le painter du curseur.
+     */
     public HighlightPainter getCursorPainter() {
         return cursorPainter;
     }
 
+    /**
+     * Permet d'obtenir le tag de la sélection.
+     * @return le tag de la sélection.
+     */
     public Object getSelectionTag() {
         return selectionTag;
     }
 
+    /**
+     * Permet d'obtenir le tag du curseur.
+     * @return le tag du curseur.
+     */
     public Object getCursorTag() {
         return cursorTag;
     }
 
+    /**
+     * Permet de mettre à jour l'affichage du texte.
+     */
     public void refreshText(){
         textArea.setText(application.getEditeur().getTexte().toString());
     }
 
+    /**
+     * Permet de mettre à jour l'affichage de la sélection.
+     */
     public void refreshSelectionHighlight(){
         Editeur editeur = application.getEditeur();
         if(selectionTag != null){
@@ -76,6 +118,9 @@ public class Fenetre {
         }
     }
 
+    /**
+     * Permet de mettre à jour l'affichage du curseur.
+     */
     public void refreshCursorHighlight(){
         Editeur editeur = application.getEditeur();
         if(cursorTag != null){
@@ -88,6 +133,9 @@ public class Fenetre {
         }
     }
 
+    /**
+     * Affiche la fenêtre.
+     */
     public void show(){
         JFrame frame = new JFrame("Notre éditeur de texte");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -98,13 +146,17 @@ public class Fenetre {
         frame.setVisible(true);
     }
 
+    /**
+     * Initialise la zone de texte.
+     */
     private void initTextArea(){
+        // On désactive l'édition par défaut de la zone de texte.
         textArea.setEditable(false);
-        //set text area font to monospaced
         textArea.setFont(new Font("consolas", Font.PLAIN, 12));
-        //hide the caret and the selection
+        // On cache le curseur et la sélection par défaut de la zone de texte.
         textArea.setCaretColor(Color.WHITE);
         textArea.setSelectionColor(Color.WHITE);
+
         textArea.addKeyListener(new Actionneur(application, this));
     }
 }

@@ -1,17 +1,19 @@
 package src;
 
+/**
+ * Classe au centre de l'application.
+ * C'est elle qu'il faut run dans le main.
+ */
 public class Application implements Runnable{
-    // has a clipboard field
+    
     private String clipboard;
-
-    // has an editeur field
     private Editeur editeur;
-
     private Fenetre fenetre;
-
     private String mode;
 
-    // constructor
+    /**
+     * Constructeur de la classe Application.
+     */
     public Application() {
         this.editeur = new Editeur();
         this.fenetre = new Fenetre(this);
@@ -19,33 +21,57 @@ public class Application implements Runnable{
         this.mode = "input";
     }
 
-    // has a method to get the clipboard
+    /**
+     * Permet de récupérer le contenu du presse-papier.
+     * @return le contenu du presse-papier.
+     */
     public String getClipboard() {
         return clipboard;
     }
 
-    // has a method to get the editeur
+    /**
+     * Permet de récupérer l'éditeur.
+     * @return l'éditeur.
+     */
     public Editeur getEditeur() {
         return editeur;
     }
 
+    /**
+     * Permet de récupérer la fenêtre.
+     * @return la fenêtre.
+     */
     public Fenetre getFenetre() {
         return fenetre;
     }
 
+    /**
+     * Permet de récupérer le mode.
+     * @return le mode.
+     */
     public String getMode() {
         return mode;
     }
 
-    // has a method to set the clipboard
+    /**
+     * Permet de modifier le contenu du presse-papier.
+     * @param clipboard le nouveau contenu du presse-papier.
+     */
     public void setClipboard(String clipboard) {
         this.clipboard = clipboard;
     }
 
+    /**
+     * Permet de modifier le mode.
+     * @param mode le nouvel mode.
+     */
     public void setMode(String mode) {
         this.mode = mode;
     }
 
+    /**
+     * Permet de lancer l'application.
+     */
     public void run(){
         fenetre.show();
     }
