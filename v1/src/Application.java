@@ -44,27 +44,11 @@ public class Application implements Runnable {
     }
 
     /**
-     * Permet de récupérer le mode.
-     * @return le mode.
-     */
-    public String getMode() {
-        return mode;
-    }
-
-    /**
      * Permet de modifier le contenu du presse-papier.
      * @param clipboard le nouveau contenu du presse-papier.
      */
     public void setClipboard(String clipboard) {
         this.clipboard = clipboard;
-    }
-
-    /**
-     * Permet de modifier le mode.
-     * @param mode le nouvel mode.
-     */
-    public void setMode(String mode) {
-        this.mode = mode;
     }
 
     /**
