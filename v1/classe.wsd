@@ -1,0 +1,135 @@
+@startuml classe
+class "Application"{
+    -clipboard : String
+    -editeur : Editeur
+    -fenetre : Fenetre
+    -mode : String
+    +Application() <<constructor>>
+    +getClipboard() : String
+    +getFenetre() : Fenetre
+    +getMode() : String
+    +setClipboard(clipboard : String) : void
+    +setMode(mode : String) : void
+    +run() : void
+}
+
+class "Fenetre"{
+    -application : Application
+    -textArea : JTextArea
+    -highlighter : Highlighter
+    -selectionPainter : HighlightPainter
+    -cursorPainter : HighlightPainter
+    -selectionTag : Object
+    -cursorTag : Object
+    +Fenetre(application : Application) <<constructor>>
+    +getApplication() : Application
+    +getTextArea() : JTextArea
+    +getHighlighter() : Highlighter
+    +getSelectionPainter() : HighlightPainter
+    +getCursorPainter() : HighlightPainter
+    +getSelectionTag() : Object
+    +getCursorTag() : Object
+    +refreshText() : void
+    +refreshSelectionHighlight() : void
+    +refreshCursorHighlight() : void
+    +show() : void
+    -initTextArea() : void
+}
+
+class "Actionneur"{
+    -application : Application
+    -fenetre : Fenetre
+    +Actionneur(application : Application, fenetre : Fenetre) <<constructor>>
+    +keyPressed(e : KeyEvent) : void
+    +keyReleased(e : KeyEvent) : void
+    +keyTyped(e : KeyEvent) : void
+    -isPrintableChar(c : char) : boolean
+}
+
+class "Editeur"{
+    -texte : StringBuffer
+    -curseur : int
+    -selection : Selection
+    +Editeur() <<constructor>>
+    +getTexte() : StringBuffer
+    +getCurseur() : int
+    +getSelection() : Selection
+    +writeChar(c : char) : void
+    +deleteChar(position : char) : void
+    +moveCurseur(direction : char) : void
+    +moveSelection(direction : char) : void
+    +resetSelection() : void
+    +emptySelection() : boolean
+    +getSelectedText() : String
+    +setSelectedText(String replacement) : void
+    +removeSelectedText() : void
+}
+
+class "Selection"{
+    -offset : int
+    +Selection() <<constructor>>
+    +getOffset() : int
+    +setOffset(offset : int) : void
+}
+
+abstract class "Commande"{
+    #application : Application
+    #editeur : Editeur
+    +Commande(application : Application, editeur : Editeur) <<constructor>>
+    +getApplication() : Application
+    +getEditeur() : Editeur
+    {abstract}+execute() : void
+}
+
+class "Copier"{
+    +Copier(application : Application, editeur : Editeur) <<constructor>>
+    +execute() : void
+}
+
+class "Coller"{
+    +Coller(application : Application, editeur : Editeur) <<constructor>>
+    +execute() : void
+}
+
+class "Couper"{
+    +Couper(application : Application, editeur : Editeur) <<constructor>>
+    +execute() : void
+}
+
+class "DeplacerCurseur"{
+    +DeplacerCurseur(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    +execute() : void
+}
+
+class "DeplacerSelection"{
+    +DeplacerSelection(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    +execute() : void
+}
+
+class "Ecrire"{
+    +Ecrire(application : Application, editeur : Editeur, c : char) <<constructor>>
+    +execute() : void
+}
+
+class "Supprimer"{
+    +Supprimer(application : Application, editeur : Editeur, position : char) <<constructor>>
+    +execute() : void
+}
+
+Application *-->"1" Editeur
+Application *-->"1" Fenetre
+Fenetre -->"1" Actionneur
+Fenetre "1"<--*"1" Actionneur
+Actionneur -->"0..n" Commande
+Actionneur -->"1" Application
+Application "1"<-- Commande
+Editeur *-->"1" Selection
+Commande -->"1" Editeur
+Commande <|-- Copier
+Commande <|-- Couper
+Commande <|-- Coller
+Commande <|-- DeplacerCurseur
+Commande <|-- DeplacerSelection
+Commande <|-- Ecrire
+Commande <|-- Supprimer
+@enduml

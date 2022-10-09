@@ -1,12 +1,11 @@
-public class Copier extends Command{
-
-    public Copier(Application a, Editeur e){
-        super(a, e);
+package src;
+public class Copier extends Commande {
+    public Copier(Application application, Editeur editeur) {
+        super(application, editeur);
     }
-
-    @Override
-    public void execute(){
-        getApplication().setClipboard(getEditeur().getSelection());
-        getEditeur().getCurseur().refresh(getEditeur().getBuffer());
+    //sets the clipboard to the selected text
+    public void execute() {
+        application.setClipboard(editeur.getSelectedText());
+        editeur.resetSelection();
     }
 }

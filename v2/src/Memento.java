@@ -1,19 +1,19 @@
-import java.util.Stack;
+package src;
 
 public class Memento {
-    private Stack<Snapshot> prec;
-    private Stack<Snapshot> suiv;
+    private StringBuffer texte;
+    private int curseur;
 
-    public Memento() {
-        this.prec = new Stack<Snapshot>();
-        this.suiv = new Stack<Snapshot>();
+    public Memento(StringBuffer texte, int curseur) {
+        this.texte = texte;
+        this.curseur = curseur;
     }
 
-    public Stack<Snapshot> getPilePrec() {
-        return prec;
+    public StringBuffer getTexte() {
+        return texte;
     }
 
-    public Stack<Snapshot> getPileSuiv() {
-        return suiv;
+    public int getCurseur() {
+        return curseur;
     }
 }

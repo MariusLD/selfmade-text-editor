@@ -1,12 +1,13 @@
-public class Couper extends Command{
-    
-    public Couper(Application a, Editeur e){
-        super(a, e);
+package src;
+public class Couper extends Commande {
+    public Couper(Application application, Editeur editeur) {
+        super(application, editeur);
     }
-
-    @Override
-    public void execute(){
-        getApplication().setClipboard(getEditeur().getSelection());
-        getEditeur().supprimerSelection();
+    //sets the clipboard to the selected text
+    // removes the selected text
+    public void execute() {
+        application.setClipboard(editeur.getSelectedText());
+        editeur.removeSelectedText();
+        editeur.resetSelection();
     }
 }

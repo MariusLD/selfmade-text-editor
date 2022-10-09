@@ -1,128 +1,52 @@
-import javax.swing.*;
+package src;
 
-import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+public class Application implements Runnable{
+    // has a clipboard field
+    private String clipboard;
 
-import java.util.Scanner;
+    // has an editeur field
+    private Editeur editeur;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+    private Fenetre fenetre;
 
-public class Application  {
-    private static Editeur editeur;
-    private Actionneur actionneur;
-    private static String clipboard;
+    private String mode;
 
-    private static Command copie;
-    private static Command colle;
-    private static Command coupe;
-
-    private void show() {
-        JFrame f = new JFrame("Notre éditeur de texte");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        ApplicationPannel ap = new ApplicationPannel();
-        f.add(ap);
-
-        f.setContentPane(ap);
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        f.setVisible(true);
-        f.setSize(600,600);
-    }
-
+    // constructor
     public Application() {
-        editeur = new Editeur();
-        actionneur = new Actionneur();
-        clipboard = new String();
-        copie = new Copier(this, editeur);
-        colle = new Coller(this, editeur);
-        coupe = new Couper(this, editeur);
+        this.editeur = new Editeur();
+        this.fenetre = new Fenetre(this);
+        this.clipboard = "";
+        this.mode = "input";
     }
 
+    // has a method to get the clipboard
     public String getClipboard() {
         return clipboard;
     }
 
-    public void setClipboard(String texte) {
-        clipboard = texte;
+    // has a method to get the editeur
+    public Editeur getEditeur() {
+        return editeur;
     }
 
-    private static class ApplicationPannel extends JPanel implements KeyListener {
-        JTextField textField = new JTextField();
-        public ApplicationPannel() {
-            this.addKeyListener(this);
-            this.setFocusable(true);
-            this.requestFocusInWindow();
-            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            textField.setEditable(false);
-            this.add(textField);
-            textField.setText("");
-            JPanel jp = new JPanel();
-            JButton ctrlC = new JButton("Ctrl+C");
-            ctrlC.addActionListener(e -> {
-                propositionSelection();
-                copie.execute();
-            });
-            JButton ctrlX = new JButton("Ctrl+X");
-            ctrlX.addActionListener(e-> {
-                propositionSelection();
-                coupe.execute();
-                textField.setText(editeur.getBuffer().toString());
-            });
-            JButton ctrlV = new JButton("Ctrl+V");
-            ctrlV.addActionListener(e ->  {
-                System.out.println("Pour une insertion du texte à coller, choisir le même emplacement pour les bornes");
-                propositionSelection();
-                colle.execute();
-                textField.setText(editeur.getBuffer().toString());
-            });
-            JButton ctrlZ = new JButton("Ctrl+Z");
-            jp.add(ctrlC);
-            jp.add(ctrlX);
-            jp.add(ctrlV);
-            jp.add(ctrlZ);
-            this.add(jp);
-        }
-        
-        public static void propositionSelection() {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Choisis la borne droite de la limite de copie, P pour previous et N pour next D pour done");
-                String temp = "";
-                while (!editeur.getCurseur().keyTypedRight(temp)) {
-                    editeur.getCurseur().affichageDroite(editeur.getBuffer());
-                    temp = sc.nextLine();
-                }
-                System.out.println("Choisis la borne gauche de la limite de copie, P pour previous et N pour next D pour done");
-                temp = "";
-                while (!editeur.getCurseur().keyTypedLeft(temp)) {
-                    editeur.getCurseur().affichageGauche(editeur.getBuffer());
-                    temp = sc.nextLine();
-                }
-        }
-
-        @Override
-        public void keyPressed(KeyEvent e) {
-            editeur.setBuffer(String.valueOf(e.getKeyChar()));
-            textField.setText(editeur.getBuffer().toString());
-        }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
-        }
+    public Fenetre getFenetre() {
+        return fenetre;
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Application().show();
-            }
-        });
+    public String getMode() {
+        return mode;
+    }
+
+    // has a method to set the clipboard
+    public void setClipboard(String clipboard) {
+        this.clipboard = clipboard;
+    }
+
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
+
+    public void run(){
+        fenetre.show();
     }
 }

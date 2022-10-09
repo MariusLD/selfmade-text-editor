@@ -1,150 +1,106 @@
-import javax.swing.*;
+package src;
 
-import java.awt.EventQueue;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.util.Stack;
 
-import java.util.Scanner;
+public class Application implements Runnable {
+    // has a clipboard field
+    private String clipboard;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+    // has an editeur field
+    private Editeur editeur;
 
-public class Application  {
-    private static Editeur editeur;
-    private static String clipboard;
+    private Fenetre fenetre;
 
-    private static Command copie;
-    private static Command colle;
-    private static Command coupe;
-    private static Command undo;
-    private static Command redo;     
+    private String mode;
 
-    private void show() {
-        JFrame f = new JFrame("Notre éditeur de texte");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    // a memento pile
+    private Stack<Memento> passe;
+    private Stack<Memento> future;
 
-        ApplicationPannel ap = new ApplicationPannel();
-        f.add(ap);
-
-        f.setContentPane(ap);
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        f.setVisible(true);
-        f.setSize(600,600);
-    }
-
+    // constructor
     public Application() {
-        editeur = new Editeur();
-        clipboard = new String();
-        copie = new Copier(this, editeur);
-        colle = new Coller(this, editeur);
-        coupe = new Couper(this, editeur);
-        undo = new Undo(this, editeur);
-        redo = new Redo(this, editeur);
+        this.editeur = new Editeur();
+        this.fenetre = new Fenetre(this);
+        this.clipboard = "";
+        this.mode = "input";
+        this.passe = new Stack<Memento>();
+        this.future = new Stack<Memento>();
     }
 
+    // has a method to get the clipboard
     public String getClipboard() {
         return clipboard;
     }
 
+    // has a method to get the editeur
+    public Editeur getEditeur() {
+        return editeur;
+    }
+
+    public Fenetre getFenetre() {
+        return fenetre;
+    }
+
+    public String getMode() {
+        return mode;
+    }
+
+    public Stack<Memento> getPasse() {
+        return passe;
+    }
+
+    public Stack<Memento> getFuture() {
+        return future;
+    }
+
+    // has a method to set the clipboard
     public void setClipboard(String texte) {
-        clipboard = texte;
+        this.clipboard = texte;
     }
 
-    private static class ApplicationPannel extends JPanel implements KeyListener {
-        JTextField textField = new JTextField();
-        private JButton last = new JButton("Dernier bouton pressé");
-        public ApplicationPannel() {
-            this.addKeyListener(this);
-            this.setFocusable(true);
-            this.requestFocusInWindow();
-            this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-            textField.setEditable(false);
-            this.add(textField);
-            textField.setText("");
-            JPanel jp = new JPanel();
-            JButton ctrlC = new JButton("Ctrl+C");
-            ctrlC.addActionListener(e -> {
-                propositionSelection();
-                copie.execute();
-                last = ctrlC;
-            });
-            JButton ctrlX = new JButton("Ctrl+X");
-            ctrlX.addActionListener(e-> {
-                propositionSelection();
-                coupe.execute();
-                textField.setText(editeur.getBuffer().toString());
-                last = ctrlX;
-            });
-            JButton ctrlV = new JButton("Ctrl+V");
-            ctrlV.addActionListener(e ->  {
-                System.out.println("Pour une insertion du texte à coller, choisir le même emplacement pour les bornes");
-                propositionSelection();
-                colle.execute();
-                textField.setText(editeur.getBuffer().toString());
-                last = ctrlV;
-            });
-            JButton ctrlZ = new JButton("<--");
-            ctrlZ.addActionListener(e -> {
-                undo.execute();
-                textField.setText(editeur.getBuffer().toString());
-                last = ctrlZ;
-            });
-            JButton ctrlF = new JButton("-->");
-            ctrlF.addActionListener(e -> {
-                redo.execute();
-                textField.setText(editeur.getBuffer().toString());
-                last = ctrlF;
-            });
-            last.addActionListener(e -> {
-                last.doClick();
-            });
-            jp.add(ctrlC);
-            jp.add(ctrlX);
-            jp.add(ctrlV);
-            jp.add(ctrlZ);
-            jp.add(ctrlF);
-            jp.add(last);
-            this.add(jp);
-        }
-        
-        public static void propositionSelection() {
-            Scanner sc = new Scanner(System.in);
-            System.out.println("Choisis la borne droite de la limite de copie, P pour previous et N pour next D pour done");
-                String temp = "";
-                while (!editeur.getCurseur().keyTypedRight(temp)) {
-                    editeur.getCurseur().affichageDroite(editeur.getBuffer());
-                    temp = sc.nextLine();
-                }
-                System.out.println("Choisis la borne gauche de la limite de copie, P pour previous et N pour next D pour done");
-                temp = "";
-                while (!editeur.getCurseur().keyTypedLeft(temp)) {
-                    editeur.getCurseur().affichageGauche(editeur.getBuffer());
-                    temp = sc.nextLine();
-                }
-        }
+    public void setMode(String mode) {
+        this.mode = mode;
+    }
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            editeur.setBuffer(String.valueOf(e.getKeyChar()));
-            textField.setText(editeur.getBuffer().toString());
+    public Memento popPasse(){
+        if(!passe.isEmpty()){
+            return passe.pop();
         }
-
-        @Override
-        public void keyTyped(KeyEvent e) {
-        }
-
-        @Override
-        public void keyReleased(KeyEvent e) {
+        else{
+            return null;
         }
     }
 
-    public static void main(String[] args) {
-        EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Application().show();
-            }
-        });
+    public Memento popFuture(){
+        if(!future.isEmpty()){
+            return future.pop();
+        }
+        else{
+            return null;
+        }
+    }
+
+    public void pushPasse(Memento m){
+        passe.push(m);
+    }
+
+    public void pushFuture(Memento m){
+        future.push(m);
+    }
+
+    public void resetFuture(){
+        future.clear();
+    }
+
+    public boolean pasDePasse(){
+        return passe.isEmpty();
+    }
+
+    public boolean pasDeFuture(){
+        return future.isEmpty();
+    }
+
+    public void run(){
+        fenetre.show();
     }
 }
