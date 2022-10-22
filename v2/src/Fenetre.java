@@ -13,7 +13,7 @@ import java.awt.*;
 public class Fenetre {
 
     private Application application;
-    private JTextArea textArea;
+    private JTextArea textArea = new JTextArea();
 
     private Highlighter highlighter;
 
@@ -23,18 +23,22 @@ public class Fenetre {
     private Object selectionTag = null;
     private Object cursorTag = null;
 
+    private Actionneur actionneur;
+
     /**
      * Constructeur de la classe Fenetre.
+     * 
      * @param application l'application.
      */
     public Fenetre(Application application) {
         this.application = application;
-        this.textArea = new JTextArea();
         this.highlighter = textArea.getHighlighter();
+        this.actionneur = new InputActionneur(this);
     }
 
     /**
      * Permet d'obtenir l'application.
+     * 
      * @return l'application.
      */
     public Application getApplication() {
@@ -43,6 +47,7 @@ public class Fenetre {
 
     /**
      * Permet d'obtenir la zone de texte.
+     * 
      * @return la zone de texte.
      */
     public JTextArea getTextArea() {
@@ -51,6 +56,7 @@ public class Fenetre {
 
     /**
      * Permet d'obtenir le highlighter.
+     * 
      * @return le highlighter.
      */
     public Highlighter getHighlighter() {
@@ -59,6 +65,7 @@ public class Fenetre {
 
     /**
      * Permet d'obtenir le painter de la sélection.
+     * 
      * @return le painter de la sélection.
      */
     public HighlightPainter getSelectionPainter() {
@@ -67,6 +74,7 @@ public class Fenetre {
 
     /**
      * Permet d'obtenir le painter du curseur.
+     * 
      * @return le painter du curseur.
      */
     public HighlightPainter getCursorPainter() {
@@ -75,6 +83,7 @@ public class Fenetre {
 
     /**
      * Permet d'obtenir le tag de la sélection.
+     * 
      * @return le tag de la sélection.
      */
     public Object getSelectionTag() {
@@ -83,35 +92,46 @@ public class Fenetre {
 
     /**
      * Permet d'obtenir le tag du curseur.
+     * 
      * @return le tag du curseur.
      */
     public Object getCursorTag() {
         return cursorTag;
     }
 
+    public Actionneur getActionneur() {
+        return actionneur;
+    }
+
+    public void setActionneur(Actionneur actionneur) {
+        textArea.removeKeyListener(this.actionneur);
+        this.actionneur = actionneur;
+        textArea.addKeyListener(actionneur);
+    }
+
     /**
      * Permet de mettre à jour l'affichage du texte.
      */
-    public void refreshText(){
+    public void refreshText() {
         textArea.setText(application.getEditeur().getTexte().toString());
+        refreshCursorHighlight();
     }
 
     /**
      * Permet de mettre à jour l'affichage de la sélection.
      */
-    public void refreshSelectionHighlight(){
+    public void refreshSelectionHighlight() {
         Editeur editeur = application.getEditeur();
-        if(selectionTag != null){
+        if (selectionTag != null) {
             highlighter.removeHighlight(selectionTag);
         }
         int off = editeur.getSelection().getOffset();
         int cur = editeur.getCurseur();
         try {
-            if(off < 0){
-                selectionTag = highlighter.addHighlight(cur+off, cur, selectionPainter);
-            }
-            else if(off > 0){
-                selectionTag = highlighter.addHighlight(cur, cur+off, selectionPainter);
+            if (off < 0) {
+                selectionTag = highlighter.addHighlight(cur + off, cur, selectionPainter);
+            } else if (off > 0) {
+                selectionTag = highlighter.addHighlight(cur, cur + off, selectionPainter);
             }
         } catch (BadLocationException e) {
             e.printStackTrace();
@@ -121,9 +141,9 @@ public class Fenetre {
     /**
      * Permet de mettre à jour l'affichage du curseur.
      */
-    public void refreshCursorHighlight(){
+    public void refreshCursorHighlight() {
         Editeur editeur = application.getEditeur();
-        if(cursorTag != null){
+        if (cursorTag != null) {
             highlighter.removeHighlight(cursorTag);
         }
         try {
@@ -136,7 +156,7 @@ public class Fenetre {
     /**
      * Affiche la fenêtre.
      */
-    public void show(){
+    public void show() {
         JFrame frame = new JFrame("Notre éditeur de texte");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(720, 480);
@@ -149,7 +169,7 @@ public class Fenetre {
     /**
      * Initialise la zone de texte.
      */
-    private void initTextArea(){
+    private void initTextArea() {
         // On désactive l'édition par défaut de la zone de texte.
         textArea.setEditable(false);
         textArea.setFont(new Font("consolas", Font.PLAIN, 12));
@@ -157,6 +177,6 @@ public class Fenetre {
         textArea.setCaretColor(Color.WHITE);
         textArea.setSelectionColor(Color.WHITE);
 
-        textArea.addKeyListener(new Actionneur(application, this));
+        textArea.addKeyListener(actionneur);
     }
 }

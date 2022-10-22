@@ -3,23 +3,24 @@ package src;
 /**
  * Classe qui gère le coupage.
  */
-public class Couper extends Commande {
+public class Couper_2 extends Commande {
 
     /**
      * Constructeur de la classe Couper.
-     * 
      * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param editeur l'éditeur.
      */
-    public Couper(Application application, Editeur editeur) {
+    public Couper_2(Application application, Editeur editeur) {
         super(application, editeur);
     }
 
     /**
-     * Copie le texte sélectionné dans le presse-papier et le supprime.
+     * Sauvegarde l'état, puis copie le texte sélectionné dans le presse-papier et le supprime.
      */
     @Override
     public void execute() {
+        application.resetFuture();
+        application.pushPasse(editeur.getMemento());
         application.setClipboard(editeur.getSelectedText());
         editeur.removeSelectedText();
         editeur.resetSelection();

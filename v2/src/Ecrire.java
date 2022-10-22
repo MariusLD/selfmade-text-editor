@@ -8,9 +8,10 @@ public class Ecrire extends Commande {
 
     /**
      * Constructeur de la classe Ecrire.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
-     * @param c le caractère à écrire.
+     * @param editeur     l'éditeur.
+     * @param c           le caractère à écrire.
      */
     public Ecrire(Application application, Editeur editeur, char c) {
         super(application, editeur);
@@ -18,28 +19,22 @@ public class Ecrire extends Commande {
     }
 
     /**
-     * Sauvegarde l'état si le caractère est un espace/saut de ligne
-     * (pour ne pas faire trop de sauvegardes),
-     * puis l'écrit au niveau du curseur,
-     * ou remplace le texte sélectionné par le caractère.
-     */
-    @Override
-    public void execute() {
-        application.resetFuture();
-        if(application.pasDePasse() || Character.isWhitespace(c)){
-            application.pushPasse(editeur.getMemento());
-        }
-        if(!editeur.emptySelection()){
-            editeur.removeSelectedText();
-            editeur.resetSelection();
-        }
-        editeur.writeChar(c);
-    }
-
-    /**
      * Permet d'obtenir le caractère à écrire.
      */
     public char getChar() {
         return c;
+    }
+
+    /**
+     * Ecrit le caractère, au niveau du curseur,
+     * ou remplace le texte sélectionné par le caractère.
+     */
+    @Override
+    public void execute() {
+        if (!editeur.emptySelection()) {
+            editeur.removeSelectedText();
+            editeur.resetSelection();
+        }
+        editeur.writeChar(c);
     }
 }
