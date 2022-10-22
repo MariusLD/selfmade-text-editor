@@ -102,13 +102,13 @@ public class Application implements Runnable {
     }
 
     public void deplaceCurseur(Direction direction) {
-        new DeplacerCurseur(this, editeur, direction).execute();
+        new DeplacerCurseur_2(this, editeur, direction).execute();
         fenetre.refreshSelectionHighlight();
         fenetre.refreshCursorHighlight();
     }
 
     public void deplaceSelection(Direction direction) {
-        new DeplacerSelection(this, editeur, direction).execute();
+        new DeplacerSelection_2(this, editeur, direction).execute();
         fenetre.refreshSelectionHighlight();
     }
 
@@ -123,7 +123,7 @@ public class Application implements Runnable {
     }
 
     private void initCommandes() {
-        commandes.put('c', () -> new Copier(this, editeur));
+        commandes.put('c', () -> new Copier_2(this, editeur));
         commandes.put('v', () -> new Coller_2(this, editeur));
         commandes.put('x', () -> new Couper_2(this, editeur));
         commandes.put('z', () -> new Annuler(this, editeur));
