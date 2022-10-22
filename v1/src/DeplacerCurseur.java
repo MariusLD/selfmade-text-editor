@@ -4,7 +4,7 @@ package src;
  * Classe qui gère le déplacement du curseur.
  */
 public class DeplacerCurseur extends Commande {
-    private char direction;
+    private Direction direction;
 
     /**
      * Constructeur de la classe DeplacerCurseur.
@@ -12,7 +12,7 @@ public class DeplacerCurseur extends Commande {
      * @param editeur l'éditeur.
      * @param direction la direction du déplacement.
      */
-    public DeplacerCurseur(Application application, Editeur editeur, char direction) {
+    public DeplacerCurseur(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);
         this.direction = direction;
     }
@@ -20,7 +20,7 @@ public class DeplacerCurseur extends Commande {
     /**
      * Permet d'obtenir la direction du déplacement.
      */
-    public char getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 

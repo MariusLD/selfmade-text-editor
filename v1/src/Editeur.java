@@ -53,14 +53,13 @@ public class Editeur {
     /**
      * Permet de supprimer un caractère du buffer.
      * @param direction la direction de la suppression.
-     * 'a' pour supprimer après le curseur, 'b' pour supprimer avant le curseur.
      */
-    public void deleteChar(char direction) {
-        if(direction == 'b' && curseur > 0){
+    public void deleteChar(Direction direction) {
+        if(direction == Direction.GAUCHE && curseur > 0){
             texte.deleteCharAt(curseur-1);
             curseur--;
         }
-        else if(direction == 'a' && curseur < texte.length()){
+        else if(direction == Direction.DROITE && curseur < texte.length()){
             texte.deleteCharAt(curseur);
         }
     }
@@ -68,20 +67,18 @@ public class Editeur {
     /**
      * Permet de déplacer le curseur.
      * @param direction la direction du déplacement.
-     * 'l' pour aller à gauche, 'r' pour aller à droite,
-     * 'u' pour aller en haut, 'd' pour aller en bas.
      */
-    public void moveCurseur(char direction) {
+    public void moveCurseur(Direction direction) {
         if(!emptySelection()){
             resetSelection();
         }
-        if(direction == 'l' && curseur > 0){
+        if(direction == Direction.GAUCHE && curseur > 0){
             curseur--;
         }
-        else if(direction == 'r' && curseur < texte.length()){
+        else if(direction == Direction.DROITE && curseur < texte.length()){
             curseur++;
         }
-        else if(direction == 'u'){
+        else if(direction == Direction.HAUT){
             int i = curseur - 1;
             while(i >= 0 && texte.charAt(i) != '\n'){
                 i--;
@@ -93,7 +90,7 @@ public class Editeur {
                 curseur = 0;
             }
         }
-        else if(direction == 'd'){
+        else if(direction == Direction.BAS){
             int i = curseur;
             while(i < texte.length() && texte.charAt(i) != '\n'){
                 i++;
@@ -113,14 +110,14 @@ public class Editeur {
      * 'l' pour aller à gauche, 'r' pour aller à droite,
      * 'u' pour aller en haut, 'd' pour aller en bas.
      */
-    public void moveSelection(char direction) {
-        if(direction == 'l' && curseur + selection.getOffset() > 0){
+    public void moveSelection(Direction direction) {
+        if(direction == Direction.GAUCHE && curseur + selection.getOffset() > 0){
             selection.setOffset(selection.getOffset()-1);
         }
-        else if(direction == 'r' && curseur + selection.getOffset() < texte.length()){
+        else if(direction == Direction.DROITE && curseur + selection.getOffset() < texte.length()){
             selection.setOffset(selection.getOffset()+1);
         }
-        else if(direction == 'u'){
+        else if(direction == Direction.HAUT){
             int i = selection.getOffset() - 1;
             while(curseur + i >= 0 && texte.charAt(curseur + i) != '\n'){
                 i--;
@@ -132,7 +129,7 @@ public class Editeur {
                 selection.setOffset(-curseur);
             }
         }
-        else if(direction == 'd'){
+        else if(direction == Direction.BAS){
             int i = selection.getOffset()+1;
             while(curseur + i < texte.length() && texte.charAt(curseur + i) != '\n'){
                 i++;

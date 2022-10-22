@@ -22,13 +22,13 @@ public class InputActionneur extends Actionneur {
         int keyCode = e.getKeyCode();
 
         if (keyCode == KeyEvent.VK_LEFT) {
-            fenetre.getApplication().deplaceCurseur('l');
+            fenetre.getApplication().deplaceCurseur(Direction.GAUCHE);
         } else if (keyCode == KeyEvent.VK_RIGHT) {
-            fenetre.getApplication().deplaceCurseur('r');
+            fenetre.getApplication().deplaceCurseur(Direction.DROITE);
         } else if (keyCode == KeyEvent.VK_UP) {
-            fenetre.getApplication().deplaceCurseur('u');
+            fenetre.getApplication().deplaceCurseur(Direction.HAUT);
         } else if (keyCode == KeyEvent.VK_DOWN) {
-            fenetre.getApplication().deplaceCurseur('d');
+            fenetre.getApplication().deplaceCurseur(Direction.BAS);
         } else if (keyCode == KeyEvent.VK_ESCAPE) {
             changeActionneur(new CommandeActionneur(fenetre));
         }
@@ -41,9 +41,9 @@ public class InputActionneur extends Actionneur {
         if (isPrintableChar(keyChar) || keyChar == KeyEvent.VK_ENTER) {
             fenetre.getApplication().ecrit(keyChar);
         } else if (keyChar == KeyEvent.VK_BACK_SPACE) {
-            fenetre.getApplication().supprime('b');
+            fenetre.getApplication().supprime(Direction.GAUCHE);
         } else if (keyChar == KeyEvent.VK_DELETE) {
-            fenetre.getApplication().supprime('a');
+            fenetre.getApplication().supprime(Direction.DROITE);
         }
     }
 

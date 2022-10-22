@@ -1,24 +1,32 @@
 @startuml classe
+
+enum "Direction"{
+    HAUT 
+    BAS
+    DROITE
+    GAUCHE
+}
+
 class "Application"{
     -clipboard : String
     -editeur : Editeur
     -fenetre : Fenetre
+    -commandes : Map<Character, Callable<Commande>>
 
     +Application() <<constructor>>
 
     +getClipboard() : String
     +getEditeur() : Editeur
     +getFenetre() : Fenetre
+    +getCommandes() : Map<Character, Callable<Commande>>
     +setClipboard(clipboard : String) : void
 
-    +deplaceCurseur(direction : char) : void
-    +deplaceSelection(direction : char) : void
+    +deplaceCurseur(direction : Direction) : void
+    +deplaceSelection(direction : Direction) : void
     +ecrit(c : char) : void
-    +supprime() : void
-    +copie() : void
-    +coupe() : void
-    +colle() : void
-
+    +supprime(direction : Direction) : void
+    -initCommandes() : void
+    +getCommande(c : char) : Commande
     +run() : void
 }
 
@@ -88,9 +96,9 @@ class "Editeur"{
     +getSelection() : Selection
 
     +writeChar(c : char) : void
-    +deleteChar(direction : char) : void
-    +moveCurseur(direction : char) : void
-    +moveSelection(direction : char) : void
+    +deleteChar(direction : Direction) : void
+    +moveCurseur(direction : Direction) : void
+    +moveSelection(direction : Direction) : void
     +resetSelection() : void
     +emptySelection() : boolean
     +getSelectedText() : String
@@ -138,21 +146,21 @@ class "Couper"{
 }
 
 class "DeplacerCurseur"{
-    -direction : char
+    -direction : Direction
     
-    +DeplacerCurseur(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    +DeplacerCurseur(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
     
-    +getDirection() : char
+    +getDirection() : Direction
 
     +execute() : void
 }
 
 class "DeplacerSelection"{
-    -direction : char
+    -direction : Direction
 
-    +DeplacerSelection(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    +DeplacerSelection(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
     
-    +getDirection() : char
+    +getDirection() : Direction
 
     +execute() : void
 }
@@ -168,11 +176,11 @@ class "Ecrire"{
 }
 
 class "Supprimer"{
-    -direction : char
+    -direction : Direction
 
-    +Supprimer(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    +Supprimer(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
     
-    +getDirection() : char
+    +getDirection() : Direction
     
     +execute() : void
 }
@@ -186,6 +194,10 @@ Fenetre *-->"1" Application
 Application "1"<--* Commande
 Editeur *-->"1" Selection
 Commande *-->"1" Editeur
+
+DeplacerCurseur *-->"1" Direction
+DeplacerSelection *-->"1" Direction
+Supprimer *-->"1" Direction
 
 Commande <|-- Copier
 Commande <|-- Couper

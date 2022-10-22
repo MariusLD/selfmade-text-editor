@@ -11,21 +11,20 @@ public class CommandeActionneur extends Actionneur {
     @Override
     public void keyPressed(KeyEvent e) {
         int keyCode = e.getKeyCode();
-
-        if (keyCode == KeyEvent.VK_C) {
-            fenetre.getApplication().copie();
-        } else if (keyCode == KeyEvent.VK_X) {
-            fenetre.getApplication().coupe();
-        } else if (keyCode == KeyEvent.VK_V) {
-            fenetre.getApplication().colle();
-        } else if (keyCode == KeyEvent.VK_LEFT) {
-            fenetre.getApplication().deplaceSelection('l');
+        if (keyCode == KeyEvent.VK_LEFT) {
+            fenetre.getApplication().deplaceSelection(Direction.GAUCHE);
         } else if (keyCode == KeyEvent.VK_RIGHT) {
-            fenetre.getApplication().deplaceSelection('r');
+            fenetre.getApplication().deplaceSelection(Direction.DROITE);
         } else if (keyCode == KeyEvent.VK_UP) {
-            fenetre.getApplication().deplaceSelection('u');
+            fenetre.getApplication().deplaceSelection(Direction.HAUT);
         } else if (keyCode == KeyEvent.VK_DOWN) {
-            fenetre.getApplication().deplaceSelection('d');
+            fenetre.getApplication().deplaceSelection(Direction.BAS);
+        } else{
+            Commande com = fenetre.getApplication().getCommande(e.getKeyChar());
+            if (com != null) {
+                com.execute();
+                fenetre.refreshText();
+            }
         }
     }
 

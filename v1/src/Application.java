@@ -1,5 +1,9 @@
 package src;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+
 /**
  * Classe au centre de l'application.
  * C'est elle qu'il faut run dans le main.
@@ -9,12 +13,14 @@ public class Application implements Runnable {
     private String clipboard = "";
     private Editeur editeur = new Editeur();
     private Fenetre fenetre;
+    private Map<Character, Callable<Commande>> commandes = new HashMap<Character, Callable<Commande>>();
 
     /**
      * Constructeur de la classe Application.
      */
     public Application() {
         this.fenetre = new Fenetre(this);
+        initCommandes();
     }
 
     /**
@@ -42,6 +48,14 @@ public class Application implements Runnable {
     }
 
     /**
+     * Permet de récupérer la map des commandes.
+     * @return la map des commandes.
+     */
+    public Map<Character, Callable<Commande>> getCommandes() {
+        return commandes;
+    }
+
+    /**
      * Permet de modifier le contenu du presse-papier.
      * @param clipboard le nouveau contenu du presse-papier.
      */
@@ -49,13 +63,13 @@ public class Application implements Runnable {
         this.clipboard = clipboard;
     }
 
-    public void deplaceCurseur(char direction) {
+    public void deplaceCurseur(Direction direction) {
         new DeplacerCurseur(this, editeur, direction).execute();
         fenetre.refreshSelectionHighlight();
         fenetre.refreshCursorHighlight();
     }
 
-    public void deplaceSelection(char direction) {
+    public void deplaceSelection(Direction direction) {
         new DeplacerSelection(this, editeur, direction).execute();
         fenetre.refreshSelectionHighlight();
     }
@@ -65,26 +79,24 @@ public class Application implements Runnable {
         fenetre.refreshText();
     }
 
-    public void supprime(char direction) {
+    public void supprime(Direction direction) {
         new Supprimer(this, editeur, direction).execute();
         fenetre.refreshText();
     }
 
-    public void copie() {
-        new Copier(this, editeur).execute();
-        fenetre.refreshSelectionHighlight();
+    private void initCommandes(){
+        commandes.put('c', () -> new Copier(this, editeur));
+        commandes.put('v', () -> new Coller(this, editeur));
+        commandes.put('x', () -> new Couper(this, editeur));
     }
 
-    public void coupe() {
-        new Couper(this, editeur).execute();
-        fenetre.refreshText();
+    public Commande getCommande(char c) {
+        try {
+            return commandes.get(c).call();
+        } catch (Exception e) {
+            return null;
+        }    
     }
-
-    public void colle() {
-        new Coller(this, editeur).execute();
-        fenetre.refreshText();
-    }
-
 
     /**
      * Permet de lancer l'application.

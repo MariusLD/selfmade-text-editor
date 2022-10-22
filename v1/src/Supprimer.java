@@ -4,7 +4,7 @@ package src;
  * Classe qui gère la suppression.
  */
 public class Supprimer extends Commande {
-    private char direction;
+    private Direction direction;
 
     /**
      * Constructeur de la classe Supprimer.
@@ -12,7 +12,7 @@ public class Supprimer extends Commande {
      * @param editeur l'éditeur.
      * @param direction la direction de la suppression ('a' pour after, 'b' pour before).
      */
-    public Supprimer(Application application, Editeur editeur, char direction) {
+    public Supprimer(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);
         this.direction = direction;
     }
@@ -20,7 +20,7 @@ public class Supprimer extends Commande {
     /**
      * Permet d'obtenir la direction de suppression.
      */
-    public char getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 
