@@ -6,17 +6,15 @@ package src;
  */
 public class Application implements Runnable {
     
-    private String clipboard;
-    private Editeur editeur;
+    private String clipboard = "";
+    private Editeur editeur = new Editeur();
     private Fenetre fenetre;
 
     /**
      * Constructeur de la classe Application.
      */
     public Application() {
-        this.editeur = new Editeur();
         this.fenetre = new Fenetre(this);
-        this.clipboard = "";
     }
 
     /**
@@ -50,6 +48,43 @@ public class Application implements Runnable {
     public void setClipboard(String clipboard) {
         this.clipboard = clipboard;
     }
+
+    public void deplaceCurseur(char direction) {
+        new DeplacerCurseur(this, editeur, direction).execute();
+        fenetre.refreshSelectionHighlight();
+        fenetre.refreshCursorHighlight();
+    }
+
+    public void deplaceSelection(char direction) {
+        new DeplacerSelection(this, editeur, direction).execute();
+        fenetre.refreshSelectionHighlight();
+    }
+
+    public void ecrit(char c) {
+        new Ecrire(this, editeur, c).execute();
+        fenetre.refreshText();
+    }
+
+    public void supprime(char direction) {
+        new Supprimer(this, editeur, direction).execute();
+        fenetre.refreshText();
+    }
+
+    public void copie() {
+        new Copier(this, editeur).execute();
+        fenetre.refreshSelectionHighlight();
+    }
+
+    public void coupe() {
+        new Couper(this, editeur).execute();
+        fenetre.refreshText();
+    }
+
+    public void colle() {
+        new Coller(this, editeur).execute();
+        fenetre.refreshText();
+    }
+
 
     /**
      * Permet de lancer l'application.

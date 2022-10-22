@@ -6,17 +6,14 @@ package src;
  */
 public class Editeur {
 
-    private StringBuffer texte;
-    private int curseur;
-    private Selection selection;
+    private StringBuffer texte = new StringBuffer();
+    private int curseur = 0;
+    private Selection selection = new Selection();
 
     /**
      * Constructeur de la classe Editeur.
      */
     public Editeur() {
-        this.texte = new StringBuffer();
-        this.curseur = 0;
-        this.selection = new Selection();
     }
 
     /**

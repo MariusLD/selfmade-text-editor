@@ -4,14 +4,12 @@ package src;
  * Classe qui gère la sélection.
  */
 public class Selection {
-    private int offset;
+    private int offset = 0;
 
     /**
      * Constructeur de la classe Selection.
-     * @param offset l'offset de la sélection.
      */
     public Selection(){
-        this.offset = 0;
     }
 
     /**

@@ -13,7 +13,7 @@ import java.awt.*;
 public class Fenetre {
 
     private Application application;
-    private JTextArea textArea;
+    private JTextArea textArea = new JTextArea();
 
     private Highlighter highlighter;
 
@@ -23,14 +23,16 @@ public class Fenetre {
     private Object selectionTag = null;
     private Object cursorTag = null;
 
+    private Actionneur actionneur;
+
     /**
      * Constructeur de la classe Fenetre.
      * @param application l'application.
      */
     public Fenetre(Application application) {
         this.application = application;
-        this.textArea = new JTextArea();
         this.highlighter = textArea.getHighlighter();
+        this.actionneur = new InputActionneur(this);
     }
 
     /**
@@ -89,11 +91,22 @@ public class Fenetre {
         return cursorTag;
     }
 
+    public Actionneur getActionneur() {
+        return actionneur;
+    }
+
+    public void setActionneur(Actionneur actionneur) {
+        textArea.removeKeyListener(this.actionneur);
+        this.actionneur = actionneur;
+        textArea.addKeyListener(actionneur);
+    }
+
     /**
      * Permet de mettre à jour l'affichage du texte.
      */
     public void refreshText(){
         textArea.setText(application.getEditeur().getTexte().toString());
+        refreshCursorHighlight();
     }
 
     /**
@@ -157,6 +170,6 @@ public class Fenetre {
         textArea.setCaretColor(Color.WHITE);
         textArea.setSelectionColor(Color.WHITE);
 
-        textArea.addKeyListener(new Actionneur(application, this));
+        textArea.addKeyListener(actionneur);
     }
 }
