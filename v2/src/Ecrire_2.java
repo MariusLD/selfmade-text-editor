@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère l'écriture.
  */
-public class Ecrire_2 extends Commande {
+public class Ecrire_2 extends Ecrire implements Sauvegarde {
     private char c;
 
     /**
@@ -13,8 +13,7 @@ public class Ecrire_2 extends Commande {
      * @param c le caractère à écrire.
      */
     public Ecrire_2(Application application, Editeur editeur, char c) {
-        super(application, editeur);
-        this.c = c;
+        super(application, editeur, c);
     }
 
     /**
@@ -25,21 +24,15 @@ public class Ecrire_2 extends Commande {
      */
     @Override
     public void execute() {
+        save();
+        super.execute();
+    }
+
+    @Override
+    public void save() {
         application.resetFuture();
         if(application.pasDePasse() || Character.isWhitespace(c)){
             application.pushPasse(editeur.getMemento());
         }
-        if(!editeur.emptySelection()){
-            editeur.removeSelectedText();
-            editeur.resetSelection();
-        }
-        editeur.writeChar(c);
-    }
-
-    /**
-     * Permet d'obtenir le caractère à écrire.
-     */
-    public char getChar() {
-        return c;
     }
 }

@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère le collage.
  */
-public class Coller_2 extends Commande {
+public class Coller_2 extends Coller implements Sauvegarde {
 
     /**
      * Constructeur de la classe Coller.
@@ -19,9 +19,13 @@ public class Coller_2 extends Commande {
      */
     @Override
     public void execute() {
+        save();
+        super.execute();
+    }
+
+    @Override
+    public void save() {
         application.resetFuture();
         application.pushPasse(editeur.getMemento());
-        editeur.setSelectedText(application.getClipboard());
-        editeur.resetSelection();
     }
 }

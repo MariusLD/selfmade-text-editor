@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère le coupage.
  */
-public class Couper_2 extends Commande {
+public class Couper_2 extends Couper implements Sauvegarde {
 
     /**
      * Constructeur de la classe Couper.
@@ -19,10 +19,13 @@ public class Couper_2 extends Commande {
      */
     @Override
     public void execute() {
+        save();
+        super.execute();
+    }
+
+    @Override
+    public void save() {
         application.resetFuture();
         application.pushPasse(editeur.getMemento());
-        application.setClipboard(editeur.getSelectedText());
-        editeur.removeSelectedText();
-        editeur.resetSelection();
     }
 }

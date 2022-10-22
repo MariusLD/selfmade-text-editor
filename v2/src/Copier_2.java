@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère la copie.
  */
-public class Copier_2 extends Commande {
+public class Copier_2 extends Copier implements Sauvegarde {
     
     /**
      * Constructeur de la classe Copier.
@@ -19,9 +19,13 @@ public class Copier_2 extends Commande {
      */
     @Override
     public void execute() {
+        save();
+        super.execute();
+    }
+
+    @Override
+    public void save() {
         application.resetFuture();
         application.pushPasse(editeur.getMemento());
-        application.setClipboard(editeur.getSelectedText());
-        editeur.resetSelection();
     }
 }

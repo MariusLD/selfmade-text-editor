@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère la suppression.
  */
-public class Supprimer_2 extends Commande {
+public class Supprimer_2 extends Supprimer implements Sauvegarde {
     private Direction direction;
 
     /**
@@ -13,8 +13,7 @@ public class Supprimer_2 extends Commande {
      * @param direction la direction de la suppression ('a' pour after, 'b' pour before).
      */
     public Supprimer_2(Application application, Editeur editeur, Direction direction) {
-        super(application, editeur);
-        this.direction = direction;
+        super(application, editeur, direction);
     }
 
     /**
@@ -23,21 +22,13 @@ public class Supprimer_2 extends Commande {
      */
     @Override
     public void execute() {
-        application.resetFuture();
-        application.pushPasse(editeur.getMemento());
-        if(!editeur.emptySelection()){
-            editeur.removeSelectedText();
-            editeur.resetSelection();
-        }
-        else{
-            editeur.deleteChar(direction);
-        }
+        save();
+        super.execute();
     }
 
-    /**
-     * Permet d'obtenir la direction de suppression.
-     */
-    public Direction getDirection() {
-        return direction;
+    @Override
+    public void save() {
+        application.resetFuture();
+        application.pushPasse(editeur.getMemento());
     }
 }
