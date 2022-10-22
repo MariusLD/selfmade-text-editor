@@ -18,16 +18,16 @@ public class DeplacerCurseur extends Commande {
     }
 
     /**
-     * Déplace le curseur.
-     */
-    public void execute() {
-        editeur.moveCurseur(direction);
-    }
-
-    /**
      * Permet d'obtenir la direction du déplacement.
      */
     public char getDirection() {
         return direction;
+    }
+
+    /**
+     * Déplace le curseur.
+     */
+    public void execute() {
+        editeur.moveCurseur(direction);
     }
 }

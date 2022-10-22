@@ -18,6 +18,13 @@ public class Ecrire extends Commande {
     }
 
     /**
+     * Permet d'obtenir le caractère à écrire.
+     */
+    public char getChar() {
+        return c;
+    }
+
+    /**
      * Ecrit le caractère, au niveau du curseur,
      * ou remplace le texte sélectionné par le caractère.
      */
@@ -28,12 +35,5 @@ public class Ecrire extends Commande {
             editeur.resetSelection();
         }
         editeur.writeChar(c);
-    }
-
-    /**
-     * Permet d'obtenir le caractère à écrire.
-     */
-    public char getChar() {
-        return c;
     }
 }

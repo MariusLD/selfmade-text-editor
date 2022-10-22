@@ -18,6 +18,13 @@ public class Supprimer extends Commande {
     }
 
     /**
+     * Permet d'obtenir la direction de suppression.
+     */
+    public char getDirection() {
+        return direction;
+    }
+
+    /**
      * Supprime le caractère avant ou après le curseur,
      * ou supprime le texte sélectionné.
      */
@@ -30,12 +37,5 @@ public class Supprimer extends Commande {
         else{
             editeur.deleteChar(direction);
         }
-    }
-
-    /**
-     * Permet d'obtenir la direction de suppression.
-     */
-    public char getDirection() {
-        return direction;
     }
 }

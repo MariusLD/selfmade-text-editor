@@ -3,10 +3,22 @@ class "Application"{
     -clipboard : String
     -editeur : Editeur
     -fenetre : Fenetre
+
     +Application() <<constructor>>
+
     +getClipboard() : String
+    +getEditeur() : Editeur
     +getFenetre() : Fenetre
     +setClipboard(clipboard : String) : void
+
+    +deplaceCurseur(direction : char) : void
+    +deplaceSelection(direction : char) : void
+    +ecrit(c : char) : void
+    +supprime() : void
+    +copie() : void
+    +coupe() : void
+    +colle() : void
+
     +run() : void
 }
 
@@ -18,7 +30,10 @@ class "Fenetre"{
     -cursorPainter : HighlightPainter
     -selectionTag : Object
     -cursorTag : Object
+    -actionneur : Actionneur
+
     +Fenetre(application : Application) <<constructor>>
+    
     +getApplication() : Application
     +getTextArea() : JTextArea
     +getHighlighter() : Highlighter
@@ -26,6 +41,9 @@ class "Fenetre"{
     +getCursorPainter() : HighlightPainter
     +getSelectionTag() : Object
     +getCursorTag() : Object
+    +getActionneur() : Actionneur
+    +setActionneur(actionneur : Actionneur) : void
+
     +refreshText() : void
     +refreshSelectionHighlight() : void
     +refreshCursorHighlight() : void
@@ -33,26 +51,42 @@ class "Fenetre"{
     -initTextArea() : void
 }
 
-class "Actionneur"{
-    -application : Application
-    -fenetre : Fenetre
-    -mode : String
-    +Actionneur(application : Application, fenetre : Fenetre) <<constructor>>
+abstract class "Actionneur"{
+    #fenetre : Fenetre
+
+    +Actionneur(fenetre : Fenetre) <<constructor>>
+
+    +getFenetre() : Fenetre
+
+    #changeActionneur(actionneur : Actionneur) : void
+}
+
+class "InputActionneur"{
+    +InputActionneur(fenetre : Fenetre) <<constructor>>
+
+    +keyPressed(e : KeyEvent) : void
+    +keyTyped(e : KeyEvent) : void
+    -isPrintableChar(c : char) : boolean
+}
+
+class "CommandeActionneur"{
+    +CommandeActionneur(fenetre : Fenetre) <<constructor>>
+
     +keyPressed(e : KeyEvent) : void
     +keyReleased(e : KeyEvent) : void
-    +keyTyped(e : KeyEvent) : void
-    +getMode() : String
-    -isPrintableChar(c : char) : boolean
 }
 
 class "Editeur"{
     -texte : StringBuffer
     -curseur : int
     -selection : Selection
+
     +Editeur() <<constructor>>
+    
     +getTexte() : StringBuffer
     +getCurseur() : int
     +getSelection() : Selection
+
     +writeChar(c : char) : void
     +deleteChar(direction : char) : void
     +moveCurseur(direction : char) : void
@@ -66,7 +100,9 @@ class "Editeur"{
 
 class "Selection"{
     -offset : int
+
     +Selection() <<constructor>>
+
     +getOffset() : int
     +setOffset(offset : int) : void
 }
@@ -74,64 +110,82 @@ class "Selection"{
 abstract class "Commande"{
     #application : Application
     #editeur : Editeur
+
     +Commande(application : Application, editeur : Editeur) <<constructor>>
+    
     +getApplication() : Application
     +getEditeur() : Editeur
+    
     {abstract}+execute() : void
 }
 
 class "Copier"{
     +Copier(application : Application, editeur : Editeur) <<constructor>>
+    
     +execute() : void
 }
 
 class "Coller"{
     +Coller(application : Application, editeur : Editeur) <<constructor>>
+    
     +execute() : void
 }
 
 class "Couper"{
     +Couper(application : Application, editeur : Editeur) <<constructor>>
+    
     +execute() : void
 }
 
 class "DeplacerCurseur"{
     -direction : char
+    
     +DeplacerCurseur(application : Application, editeur : Editeur, direction : char) <<constructor>>
-    +execute() : void
+    
     +getDirection() : char
+
+    +execute() : void
 }
 
 class "DeplacerSelection"{
     -direction : char
+
     +DeplacerSelection(application : Application, editeur : Editeur, direction : char) <<constructor>>
-    +execute() : void
+    
     +getDirection() : char
+
+    +execute() : void
 }
 
 class "Ecrire"{
     -c : char
+    
     +Ecrire(application : Application, editeur : Editeur, c : char) <<constructor>>
-    +execute() : void
+    
     +getChar() : char
+    
+    +execute() : void
 }
 
 class "Supprimer"{
     -direction : char
+
     +Supprimer(application : Application, editeur : Editeur, direction : char) <<constructor>>
-    +execute() : void
+    
     +getDirection() : char
+    
+    +execute() : void
 }
 
 Application *-->"1" Editeur
 Application *-->"1" Fenetre
-Fenetre -->"1" Actionneur
-Fenetre "1"<--*"1" Actionneur
-Actionneur -->"0..n" Commande
-Actionneur -->"1" Application
+Application -->"0..n" Commande
+Fenetre *-->"1" Actionneur
+Fenetre "1"<--* Actionneur
 Application "1"<-- Commande
 Editeur *-->"1" Selection
 Commande -->"1" Editeur
+
 Commande <|-- Copier
 Commande <|-- Couper
 Commande <|-- Coller
@@ -139,4 +193,7 @@ Commande <|-- DeplacerCurseur
 Commande <|-- DeplacerSelection
 Commande <|-- Ecrire
 Commande <|-- Supprimer
+
+Actionneur <|-- InputActionneur
+Actionneur <|-- CommandeActionneur
 @enduml

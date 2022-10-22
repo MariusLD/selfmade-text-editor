@@ -18,16 +18,16 @@ public class DeplacerSelection extends Commande {
     }
 
     /**
-     * Déplace la sélection.
-     */
-    public void execute() {
-        editeur.moveSelection(direction);
-    }
-
-    /**
      * Permet d'obtenir la direction du déplacement.
      */
     public char getDirection() {
         return direction;
+    }
+
+    /**
+     * Déplace la sélection.
+     */
+    public void execute() {
+        editeur.moveSelection(direction);
     }
 }

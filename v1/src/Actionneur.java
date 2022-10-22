@@ -14,6 +14,14 @@ public abstract class Actionneur extends KeyAdapter {
         this.fenetre = fenetre;
     }
 
+    /**
+     * Permet d'obtenir la fenêtre.
+     * @return la fenêtre.
+     */
+    public Fenetre getFenetre() {
+        return fenetre;
+    }
+
     protected void changeActionneur(Actionneur actionneur) {
         fenetre.setActionneur(actionneur);
     }
