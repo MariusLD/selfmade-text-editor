@@ -182,9 +182,10 @@ Application *-->"1" Fenetre
 Application -->"0..n" Commande
 Fenetre *-->"1" Actionneur
 Fenetre "1"<--* Actionneur
-Application "1"<-- Commande
+Fenetre *-->"1" Application
+Application "1"<--* Commande
 Editeur *-->"1" Selection
-Commande -->"1" Editeur
+Commande *-->"1" Editeur
 
 Commande <|-- Copier
 Commande <|-- Couper
