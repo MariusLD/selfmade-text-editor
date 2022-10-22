@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère le collage.
  */
-public class Coller_2 extends Coller implements Sauvegarde {
+public class Coller_2 extends Coller implements Sauvegardable, Scriptable {
 
     /**
      * Constructeur de la classe Coller.
@@ -12,6 +12,7 @@ public class Coller_2 extends Coller implements Sauvegarde {
      */
     public Coller_2(Application application, Editeur editeur) {
         super(application, editeur);
+        script();
     }
     
     /**
@@ -26,6 +27,14 @@ public class Coller_2 extends Coller implements Sauvegarde {
     @Override
     public void save() {
         application.resetFuture();
-        application.pushPasse(editeur.getMemento());
+        application.pushPasse(editeur.createMemento());
+    }
+
+    @Override
+    public void script() {
+        Script s = application.getScript();
+        if(s.isRegistering()) {
+            s.enregistrer(this);
+        }
     }
 }

@@ -16,8 +16,10 @@ public class Application implements Runnable {
     private Fenetre fenetre;
     private Map<Character, Callable<Commande>> commandes = new HashMap<Character, Callable<Commande>>();
 
-    private Stack<Memento> passe = new Stack<Memento>();;
-    private Stack<Memento> future = new Stack<Memento>();;
+    private Stack<Memento> passe = new Stack<Memento>();
+    private Stack<Memento> future = new Stack<Memento>();
+    
+    private Script script = new Script();
 
     /**
      * Constructeur de la classe Application.
@@ -82,6 +84,15 @@ public class Application implements Runnable {
     }
 
     /**
+     * Permet de récupérer le script.
+     * 
+     * @return le script.
+     */
+    public Script getScript() {
+        return script;
+    }
+
+    /**
      * Permet de modifier le contenu du presse-papier.
      * 
      * @param clipboard le nouveau contenu du presse-papier.
@@ -112,11 +123,13 @@ public class Application implements Runnable {
     }
 
     private void initCommandes() {
-        commandes.put('c', () -> new Copier_2(this, editeur));
+        commandes.put('c', () -> new Copier(this, editeur));
         commandes.put('v', () -> new Coller_2(this, editeur));
         commandes.put('x', () -> new Couper_2(this, editeur));
         commandes.put('z', () -> new Annuler(this, editeur));
-        commandes.put('y', () -> new Refaire(this, editeur));
+        commandes.put('y', () -> new Retablir(this, editeur));
+        commandes.put('e', () -> new EnregistrerScript(this, editeur));
+        commandes.put('r', () -> new RejouerScript(this, editeur));
     }
 
     public Commande getCommande(char c) {

@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère le coupage.
  */
-public class Couper_2 extends Couper implements Sauvegarde {
+public class Couper_2 extends Couper implements Sauvegardable, Scriptable {
 
     /**
      * Constructeur de la classe Couper.
@@ -12,6 +12,7 @@ public class Couper_2 extends Couper implements Sauvegarde {
      */
     public Couper_2(Application application, Editeur editeur) {
         super(application, editeur);
+        script();
     }
 
     /**
@@ -26,6 +27,14 @@ public class Couper_2 extends Couper implements Sauvegarde {
     @Override
     public void save() {
         application.resetFuture();
-        application.pushPasse(editeur.getMemento());
+        application.pushPasse(editeur.createMemento());
+    }
+
+    @Override
+    public void script() {
+        Script s = application.getScript();
+        if(s.isRegistering()) {
+            s.enregistrer(this);
+        }
     }
 }

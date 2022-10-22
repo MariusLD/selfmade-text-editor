@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère l'annulation d'une action.
  */
-public class Annuler extends Commande {
+public class Annuler extends Commande implements Scriptable {
 
     /**
      * Constructeur de la classe Annuler.
@@ -12,6 +12,7 @@ public class Annuler extends Commande {
      */
     public Annuler(Application application, Editeur editeur) {
         super(application, editeur);
+        script();
     }
 
     /**
@@ -21,12 +22,20 @@ public class Annuler extends Commande {
     public void execute() {
         editeur.resetSelection();
         if(application.pasDeFuture()){
-            application.pushFuture(editeur.getMemento());
+            application.pushFuture(editeur.createMemento());
         }
         Memento m = application.popPasse();   
         if(m != null){
             application.pushFuture(m);
-            editeur.setMemento(m);
+            m.restore();
+        }
+    }
+
+    @Override
+    public void script() {
+        Script s = application.getScript();
+        if(s.isRegistering()) {
+            s.enregistrer(this);
         }
     }
 }

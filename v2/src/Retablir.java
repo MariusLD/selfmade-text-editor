@@ -4,15 +4,16 @@ package src;
  * Classe qui gère la restauration d'un état après l'annulation
  * d'une commande.
  */
-public class Refaire extends Commande {
+public class Retablir extends Commande implements Scriptable{
 
     /**
      * Constructeur de la classe Refaire.
      * @param application l'application.
      * @param editeur l'éditeur.
      */
-    public Refaire(Application application, Editeur editeur) {
+    public Retablir(Application application, Editeur editeur) {
         super(application, editeur);
+        script();
     }
 
     /**
@@ -24,8 +25,16 @@ public class Refaire extends Commande {
         editeur.resetSelection();
         Memento m = application.popFuture();
         if(m != null){
-            editeur.setMemento(m);
+            m.restore();
             application.pushPasse(m);
+        }
+    }
+
+    @Override
+    public void script() {
+        Script s = application.getScript();
+        if(s.isRegistering()) {
+            s.enregistrer(this);
         }
     }
 }

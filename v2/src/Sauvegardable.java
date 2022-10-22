@@ -1,5 +1,5 @@
 package src;
 
-public interface Sauvegarde {
+public interface Sauvegardable {
     public void save();
 }

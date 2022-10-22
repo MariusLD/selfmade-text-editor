@@ -115,6 +115,7 @@ public class Fenetre {
     public void refreshText() {
         textArea.setText(application.getEditeur().getTexte().toString());
         refreshCursorHighlight();
+        refreshSelectionHighlight();
     }
 
     /**
@@ -178,5 +179,15 @@ public class Fenetre {
         textArea.setSelectionColor(Color.WHITE);
 
         textArea.addKeyListener(actionneur);
+    }
+
+    public void setTeinteRouge() {
+        selectionPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
+        cursorPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
+    }
+
+    public void setTeinteGrise() {
+        selectionPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
+        cursorPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
     }
 }

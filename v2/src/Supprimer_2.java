@@ -3,8 +3,7 @@ package src;
 /**
  * Classe qui gère la suppression.
  */
-public class Supprimer_2 extends Supprimer implements Sauvegarde {
-    private Direction direction;
+public class Supprimer_2 extends Supprimer implements Sauvegardable, Scriptable {
 
     /**
      * Constructeur de la classe Supprimer.
@@ -14,6 +13,7 @@ public class Supprimer_2 extends Supprimer implements Sauvegarde {
      */
     public Supprimer_2(Application application, Editeur editeur, Direction direction) {
         super(application, editeur, direction);
+        script();
     }
 
     /**
@@ -29,6 +29,14 @@ public class Supprimer_2 extends Supprimer implements Sauvegarde {
     @Override
     public void save() {
         application.resetFuture();
-        application.pushPasse(editeur.getMemento());
+        application.pushPasse(editeur.createMemento());
+    }
+
+    @Override
+    public void script() {
+        Script s = application.getScript();
+        if(s.isRegistering()) {
+            s.enregistrer(this);
+        }
     }
 }

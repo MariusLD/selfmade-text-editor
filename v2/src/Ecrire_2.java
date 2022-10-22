@@ -3,8 +3,7 @@ package src;
 /**
  * Classe qui gère l'écriture.
  */
-public class Ecrire_2 extends Ecrire implements Sauvegarde {
-    private char c;
+public class Ecrire_2 extends Ecrire implements Sauvegardable, Scriptable {
 
     /**
      * Constructeur de la classe Ecrire.
@@ -14,6 +13,7 @@ public class Ecrire_2 extends Ecrire implements Sauvegarde {
      */
     public Ecrire_2(Application application, Editeur editeur, char c) {
         super(application, editeur, c);
+        script();
     }
 
     /**
@@ -31,8 +31,16 @@ public class Ecrire_2 extends Ecrire implements Sauvegarde {
     @Override
     public void save() {
         application.resetFuture();
-        if(application.pasDePasse() || Character.isWhitespace(c)){
-            application.pushPasse(editeur.getMemento());
+        if(application.pasDePasse() || Character.isWhitespace(getChar())){
+            application.pushPasse(editeur.createMemento());
+        }
+    }
+
+    @Override
+    public void script() {
+        Script s = application.getScript();
+        if(s.isRegistering()) {
+            s.enregistrer(this);
         }
     }
 }

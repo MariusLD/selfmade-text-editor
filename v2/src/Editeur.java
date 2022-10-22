@@ -44,6 +44,24 @@ public class Editeur {
     }
 
     /**
+     * Permet de définir le curseur.
+     * 
+     * @param curseur la nouvelle position du curseur.
+     */
+    public void setCurseur(int curseur) {
+        this.curseur = curseur;
+    }
+
+    /**
+     * Permet de définir le buffer.
+     * 
+     * @param texte le nouveau buffer.
+     */
+    public void setTexte(StringBuffer texte) {
+        this.texte = texte;
+    }
+
+    /**
      * Permet d'ajouter un caractère au buffer.
      * L'ajout se fait à la position du curseur.
      * 
@@ -203,17 +221,7 @@ public class Editeur {
      * 
      * @return la sauvegarde.
      */
-    public Memento getMemento() {
-        return new Memento(new StringBuffer(texte), curseur);
-    }
-
-    /**
-     * Permet de restaurer un état depuis une sauvegarde.
-     * 
-     * @param memento la sauvegarde de l'état à restaurer.
-     */
-    public void setMemento(Memento m) {
-        this.texte = m.getTexte();
-        this.curseur = m.getCurseur();
+    public Memento createMemento() {
+        return new Snapshot(this, new StringBuffer(texte), curseur);
     }
 }
