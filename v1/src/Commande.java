@@ -10,8 +10,9 @@ public abstract class Commande {
 
     /**
      * Constructeur de la classe Commande.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
+     * @param editeur     l'éditeur.
      */
     public Commande(Application application, Editeur editeur) {
         this.application = application;
@@ -20,6 +21,7 @@ public abstract class Commande {
 
     /**
      * Permet de récupérer l'application.
+     * 
      * @return l'application.
      */
     public Application getApplication() {
@@ -28,6 +30,7 @@ public abstract class Commande {
 
     /**
      * Permet de récupérer l'éditeur.
+     * 
      * @return l'éditeur.
      */
     public Editeur getEditeur() {

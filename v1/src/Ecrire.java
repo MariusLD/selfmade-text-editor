@@ -8,9 +8,10 @@ public class Ecrire extends Commande {
 
     /**
      * Constructeur de la classe Ecrire.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
-     * @param c le caractère à écrire.
+     * @param editeur     l'éditeur.
+     * @param c           le caractère à écrire.
      */
     public Ecrire(Application application, Editeur editeur, char c) {
         super(application, editeur);
@@ -30,7 +31,7 @@ public class Ecrire extends Commande {
      */
     @Override
     public void execute() {
-        if(!editeur.emptySelection()){
+        if (!editeur.emptySelection()) {
             editeur.removeSelectedText();
             editeur.resetSelection();
         }

@@ -19,7 +19,7 @@ public class CommandeActionneur extends Actionneur {
             fenetre.getApplication().deplaceSelection(Direction.HAUT);
         } else if (keyCode == KeyEvent.VK_DOWN) {
             fenetre.getApplication().deplaceSelection(Direction.BAS);
-        } else{
+        } else {
             Commande com = fenetre.getApplication().getCommande(e.getKeyChar());
             if (com != null) {
                 com.execute();

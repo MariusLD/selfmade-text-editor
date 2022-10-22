@@ -9,7 +9,7 @@ import java.util.concurrent.Callable;
  * C'est elle qu'il faut run dans le main.
  */
 public class Application implements Runnable {
-    
+
     private String clipboard = "";
     private Editeur editeur = new Editeur();
     private Fenetre fenetre;
@@ -25,6 +25,7 @@ public class Application implements Runnable {
 
     /**
      * Permet de récupérer le contenu du presse-papier.
+     * 
      * @return le contenu du presse-papier.
      */
     public String getClipboard() {
@@ -33,6 +34,7 @@ public class Application implements Runnable {
 
     /**
      * Permet de récupérer l'éditeur.
+     * 
      * @return l'éditeur.
      */
     public Editeur getEditeur() {
@@ -41,6 +43,7 @@ public class Application implements Runnable {
 
     /**
      * Permet de récupérer la fenêtre.
+     * 
      * @return la fenêtre.
      */
     public Fenetre getFenetre() {
@@ -49,6 +52,7 @@ public class Application implements Runnable {
 
     /**
      * Permet de récupérer la map des commandes.
+     * 
      * @return la map des commandes.
      */
     public Map<Character, Callable<Commande>> getCommandes() {
@@ -57,6 +61,7 @@ public class Application implements Runnable {
 
     /**
      * Permet de modifier le contenu du presse-papier.
+     * 
      * @param clipboard le nouveau contenu du presse-papier.
      */
     public void setClipboard(String clipboard) {
@@ -84,7 +89,7 @@ public class Application implements Runnable {
         fenetre.refreshText();
     }
 
-    private void initCommandes(){
+    private void initCommandes() {
         commandes.put('c', () -> new Copier(this, editeur));
         commandes.put('v', () -> new Coller(this, editeur));
         commandes.put('x', () -> new Couper(this, editeur));
@@ -95,13 +100,13 @@ public class Application implements Runnable {
             return commandes.get(c).call();
         } catch (Exception e) {
             return null;
-        }    
+        }
     }
 
     /**
      * Permet de lancer l'application.
      */
-    public void run(){
+    public void run() {
         fenetre.show();
     }
 }

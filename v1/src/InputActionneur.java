@@ -11,7 +11,7 @@ public class InputActionneur extends Actionneur {
     /**
      * Constructeur de la classe InputActionneur.
      * 
-     * @param fenetre     la fenêtre.
+     * @param fenetre la fenêtre.
      */
     public InputActionneur(Fenetre fenetre) {
         super(fenetre);

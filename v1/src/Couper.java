@@ -7,8 +7,9 @@ public class Couper extends Commande {
 
     /**
      * Constructeur de la classe Couper.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
+     * @param editeur     l'éditeur.
      */
     public Couper(Application application, Editeur editeur) {
         super(application, editeur);

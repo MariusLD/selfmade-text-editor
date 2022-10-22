@@ -8,9 +8,11 @@ public class Supprimer extends Commande {
 
     /**
      * Constructeur de la classe Supprimer.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
-     * @param direction la direction de la suppression ('a' pour after, 'b' pour before).
+     * @param editeur     l'éditeur.
+     * @param direction   la direction de la suppression ('a' pour after, 'b' pour
+     *                    before).
      */
     public Supprimer(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);
@@ -30,11 +32,10 @@ public class Supprimer extends Commande {
      */
     @Override
     public void execute() {
-        if(!editeur.emptySelection()){
+        if (!editeur.emptySelection()) {
             editeur.removeSelectedText();
             editeur.resetSelection();
-        }
-        else{
+        } else {
             editeur.deleteChar(direction);
         }
     }

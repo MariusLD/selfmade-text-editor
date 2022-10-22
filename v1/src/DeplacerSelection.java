@@ -8,9 +8,10 @@ public class DeplacerSelection extends Commande {
 
     /**
      * Constructeur de la classe DeplacerSelection.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
-     * @param direction la direction du déplacement.
+     * @param editeur     l'éditeur.
+     * @param direction   la direction du déplacement.
      */
     public DeplacerSelection(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);

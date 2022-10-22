@@ -8,6 +8,7 @@ public abstract class Actionneur extends KeyAdapter {
 
     /**
      * Constructeur de la classe Actionneur.
+     * 
      * @param fenetre la fenêtre.
      */
     public Actionneur(Fenetre fenetre) {
@@ -16,6 +17,7 @@ public abstract class Actionneur extends KeyAdapter {
 
     /**
      * Permet d'obtenir la fenêtre.
+     * 
      * @return la fenêtre.
      */
     public Fenetre getFenetre() {
