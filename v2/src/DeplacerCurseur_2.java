@@ -7,11 +7,6 @@ public class DeplacerCurseur_2 extends DeplacerCurseur implements Scriptable {
     }
 
     @Override
-    public void execute() {
-        super.execute();
-    }
-
-    @Override
     public void script() {
         Script s = application.getScript();
         if (s.isRegistering()) {

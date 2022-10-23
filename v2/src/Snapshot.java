@@ -3,7 +3,7 @@ package src;
 /**
  * Classe qui gère les sauvegardes.
  */
-public class Snapshot implements Cloneable{
+public class Snapshot implements Cloneable {
 
     private StringBuffer texte;
     private int curseur;
@@ -37,6 +37,7 @@ public class Snapshot implements Cloneable{
         return curseur;
     }
 
+    @Override
     public Snapshot clone() {
         return new Snapshot(new StringBuffer(texte), curseur);
     }
