@@ -7,6 +7,11 @@ public class DeplacerSelection_2 extends DeplacerSelection implements Scriptable
     }
 
     @Override
+    public void execute() {
+        super.execute();
+    }
+
+    @Override
     public void script() {
         Script s = application.getScript();
         if (s.isRegistering()) {

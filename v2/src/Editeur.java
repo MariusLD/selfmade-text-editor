@@ -126,8 +126,6 @@ public class Editeur {
      * Permet de déplacer la selection.
      * 
      * @param direction la direction du déplacement.
-     *                  'l' pour aller à gauche, 'r' pour aller à droite,
-     *                  'u' pour aller en haut, 'd' pour aller en bas.
      */
     public void moveSelection(Direction direction) {
         if (direction == Direction.GAUCHE && curseur + selection.getOffset() > 0) {
@@ -221,7 +219,17 @@ public class Editeur {
      * 
      * @return la sauvegarde.
      */
-    public Memento createMemento() {
-        return new Snapshot(this, new StringBuffer(texte), curseur);
+    public Snapshot createSnapshot() {
+        return new Snapshot(new StringBuffer(texte), curseur);
+    }
+
+    /**
+     * Permet de restaurer l'état à partir d'une sauvegarde.
+     * 
+     * @param memento la sauvegarde.
+     */
+    public void restoreSnapshot(Snapshot memento) {
+        this.texte = memento.getTexte();
+        this.curseur = memento.getCurseur();
     }
 }

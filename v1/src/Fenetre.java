@@ -15,7 +15,7 @@ public class Fenetre {
     private Application application;
     private JTextArea textArea = new JTextArea();
 
-    private Highlighter highlighter;
+    private Highlighter highlighter = textArea.getHighlighter();
 
     private HighlightPainter selectionPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
     private HighlightPainter cursorPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
@@ -32,7 +32,6 @@ public class Fenetre {
      */
     public Fenetre(Application application) {
         this.application = application;
-        this.highlighter = textArea.getHighlighter();
         this.actionneur = new InputActionneur(this);
     }
 

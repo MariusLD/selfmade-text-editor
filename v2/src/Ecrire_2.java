@@ -7,39 +7,31 @@ public class Ecrire_2 extends Ecrire implements Sauvegardable, Scriptable {
 
     /**
      * Constructeur de la classe Ecrire.
+     * 
      * @param application l'application.
-     * @param editeur l'éditeur.
-     * @param c le caractère à écrire.
+     * @param editeur     l'éditeur.
+     * @param c           le caractère à écrire.
      */
     public Ecrire_2(Application application, Editeur editeur, char c) {
         super(application, editeur, c);
         script();
     }
 
-    /**
-     * Sauvegarde l'état si le caractère est un espace/saut de ligne
-     * (pour ne pas faire trop de sauvegardes),
-     * puis l'écrit au niveau du curseur,
-     * ou remplace le texte sélectionné par le caractère.
-     */
     @Override
     public void execute() {
-        save();
         super.execute();
+        save();
     }
 
     @Override
     public void save() {
-        application.resetFuture();
-        if(application.pasDePasse() || Character.isWhitespace(getChar())){
-            application.pushPasse(editeur.createMemento());
-        }
+        application.getMemoire().sauvegarde(editeur.createSnapshot());
     }
 
     @Override
     public void script() {
         Script s = application.getScript();
-        if(s.isRegistering()) {
+        if (s.isRegistering()) {
             s.enregistrer(this);
         }
     }

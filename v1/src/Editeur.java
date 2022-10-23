@@ -108,8 +108,6 @@ public class Editeur {
      * Permet de déplacer la selection.
      * 
      * @param direction la direction du déplacement.
-     *                  'l' pour aller à gauche, 'r' pour aller à droite,
-     *                  'u' pour aller en haut, 'd' pour aller en bas.
      */
     public void moveSelection(Direction direction) {
         if (direction == Direction.GAUCHE && curseur + selection.getOffset() > 0) {

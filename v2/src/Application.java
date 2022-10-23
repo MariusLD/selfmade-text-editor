@@ -3,7 +3,6 @@ package src;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.Stack;
 
 /**
  * Classe au centre de l'application.
@@ -16,10 +15,8 @@ public class Application implements Runnable {
     private Fenetre fenetre;
     private Map<Character, Callable<Commande>> commandes = new HashMap<Character, Callable<Commande>>();
 
-    private Stack<Memento> passe = new Stack<Memento>();
-    private Stack<Memento> future = new Stack<Memento>();
-    
     private Script script = new Script();
+    private Memoire memoire = new Memoire(editeur.createSnapshot());
 
     /**
      * Constructeur de la classe Application.
@@ -66,30 +63,21 @@ public class Application implements Runnable {
     }
 
     /**
-     * Permet de récupérer la pile des états précédents.
-     * 
-     * @return la pile des états précédents.
-     */
-    public Stack<Memento> getPasse() {
-        return passe;
-    }
-
-    /**
-     * Permet de récupérer la pile des états suivants.
-     * 
-     * @return la pile des états suivants.
-     */
-    public Stack<Memento> getFuture() {
-        return future;
-    }
-
-    /**
      * Permet de récupérer le script.
      * 
      * @return le script.
      */
     public Script getScript() {
         return script;
+    }
+
+    /**
+     * Permet de récupérer la mémoire.
+     * 
+     * @return la mémoire.
+     */
+    public Memoire getMemoire() {
+        return memoire;
     }
 
     /**
@@ -138,75 +126,6 @@ public class Application implements Runnable {
         } catch (Exception e) {
             return null;
         }
-    }
-
-    /**
-     * Permet de récupérer le dernier état sauvegardé.
-     * 
-     * @return le dernier état sauvegardé.
-     */
-    public Memento popPasse() {
-        if (!passe.isEmpty()) {
-            return passe.pop();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Permet de récupérer le dernier état ayant été annulé.
-     * 
-     * @return le dernier état ayant été annulé.
-     */
-    public Memento popFuture() {
-        if (!future.isEmpty()) {
-            return future.pop();
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Permet de sauvegarder un état.
-     * 
-     * @param memento l'état à sauvegarder.
-     */
-    public void pushPasse(Memento m) {
-        passe.push(m);
-    }
-
-    /**
-     * Permet de sauvegarder un état ayant été annulé.
-     * 
-     * @param memento l'état ayant été annulé.
-     */
-    public void pushFuture(Memento m) {
-        future.push(m);
-    }
-
-    /**
-     * Permet de vider la pile des états ayant été annulés.
-     */
-    public void resetFuture() {
-        future.clear();
-    }
-
-    /**
-     * Permet de savoir si la pile des états sauvegardés est vide.
-     * 
-     * @return true si la pile des états sauvegardés est vide, false sinon.
-     */
-    public boolean pasDePasse() {
-        return passe.isEmpty();
-    }
-
-    /**
-     * Permet de savoir si la pile des états ayant été annulés est vide.
-     * 
-     * @return true si la pile des états ayant été annulés est vide, false sinon.
-     */
-    public boolean pasDeFuture() {
-        return future.isEmpty();
     }
 
     /**

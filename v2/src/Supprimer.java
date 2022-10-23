@@ -11,8 +11,7 @@ public class Supprimer extends Commande {
      * 
      * @param application l'application.
      * @param editeur     l'éditeur.
-     * @param direction   la direction de la suppression ('a' pour after, 'b' pour
-     *                    before).
+     * @param direction   la direction de la suppression
      */
     public Supprimer(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);

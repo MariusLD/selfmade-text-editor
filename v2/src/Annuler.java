@@ -7,8 +7,9 @@ public class Annuler extends Commande implements Scriptable {
 
     /**
      * Constructeur de la classe Annuler.
+     * 
      * @param application L'application.
-     * @param editeur L'éditeur.
+     * @param editeur     L'éditeur.
      */
     public Annuler(Application application, Editeur editeur) {
         super(application, editeur);
@@ -21,20 +22,16 @@ public class Annuler extends Commande implements Scriptable {
     @Override
     public void execute() {
         editeur.resetSelection();
-        if(application.pasDeFuture()){
-            application.pushFuture(editeur.createMemento());
-        }
-        Memento m = application.popPasse();   
-        if(m != null){
-            application.pushFuture(m);
-            m.restore();
+        Snapshot snap = application.getMemoire().retourPasse();
+        if (snap != null) {
+            editeur.restoreSnapshot(snap);
         }
     }
 
     @Override
     public void script() {
         Script s = application.getScript();
-        if(s.isRegistering()) {
+        if (s.isRegistering()) {
             s.enregistrer(this);
         }
     }
