@@ -1,28 +1,37 @@
-@startuml classe
+@startuml class
+
+enum "Direction"{
+    HAUT
+    BAS
+    DROITE
+    GAUCHE
+}
+
 class "Application"{
     -clipboard : String
     -editeur : Editeur
     -fenetre : Fenetre
-    -mode : String
-    -passe : Stack<Memento>
-    -future : Stack<Memento>
+    -commandes : Map<Character, Callable<Commande>>
+    -script : Script
+    -memoire : Memoire
+
     +Application() <<constructor>>
+
     +getClipboard() : String
     +getEditeur() : Editeur
     +getFenetre() : Fenetre
-    +getMode() : String
-    +getPasse() : Stack<Memento>
-    +getFuture() : Stack<Memento>
+    +getCommandes() : Map<Character, Callable<Commande>>
+    +getScript() : Script
+    +getMemoire() : Memoire
     +setClipboard(clipboard : String) : void
-    +setMode(mode : String) : void
-    +popPasse() : Memento
-    +popFuture() : Memento
-    +pushPasse(m : Memento) : void
-    +pushFuture(m : Memento) : void
-    +resetFuture() : void
-    +pasDePasse() : boolean
-    +pasDeFuture() : boolean
+
+    +deplaceCurseur(direction : Direction) : void
+    +deplaceSelection(direction : Direction) : void
+    +ecrit(c : char) : void
+    +supprime(direction : Direction) : void
+    +getCommande(c : char) : Commande
     +run() : void
+    -initCommandes() : void
 }
 
 class "Fenetre"{
@@ -33,7 +42,10 @@ class "Fenetre"{
     -cursorPainter : HighlightPainter
     -selectionTag : Object
     -cursorTag : Object
+    -actionneur : Actionneur
+
     +Fenetre(application : Application) <<constructor>>
+
     +getApplication() : Application
     +getTextArea() : JTextArea
     +getHighlighter() : Highlighter
@@ -41,47 +53,74 @@ class "Fenetre"{
     +getCursorPainter() : HighlightPainter
     +getSelectionTag() : Object
     +getCursorTag() : Object
+    +getActionneur() : Actionneur
+    +setActionneur(actionneur : Actionneur) : void
+
     +refreshText() : void
     +refreshSelectionHighlight() : void
     +refreshCursorHighlight() : void
     +show() : void
     -initTextArea() : void
+
+    +setTeinteRouge() : void
+    +setTeinteGrise() : void
 }
 
-class "Actionneur"{
-    -application : Application
-    -fenetre : Fenetre
-    +Actionneur(application : Application, fenetre : Fenetre) <<constructor>>
+abstract class "Actionneur"{
+    #fenetre : Fenetre
+
+    +Actionneur(fenetre : Fenetre) <<constructor>>
+
+    +getFenetre() : Fenetre
+
+    #changeActionneur(actionneur : Actionneur) : void
+}
+
+class "InputActionneur"{
+    +InputActionneur(fenetre : Fenetre) <<constructor>>
+
     +keyPressed(e : KeyEvent) : void
-    +keyReleased(e : KeyEvent) : void
     +keyTyped(e : KeyEvent) : void
     -isPrintableChar(c : char) : boolean
+}
+
+class "CommandeActionneur"{
+    +CommandeActionneur(fenetre : Fenetre) <<constructor>>
+
+    +keyPressed(e : KeyEvent) : void
+    +keyReleased(e : KeyEvent) : void
 }
 
 class "Editeur"{
     -texte : StringBuffer
     -curseur : int
     -selection : Selection
+
     +Editeur() <<constructor>>
+
     +getTexte() : StringBuffer
     +getCurseur() : int
     +getSelection() : Selection
+
     +writeChar(c : char) : void
-    +deleteChar(direction : char) : void
-    +moveCurseur(direction : char) : void
-    +moveSelection(direction : char) : void
+    +deleteChar(direction : Direction) : void
+    +moveCurseur(direction : Direction) : void
+    +moveSelection(direction : Direction) : void
     +resetSelection() : void
     +emptySelection() : boolean
     +getSelectedText() : String
-    +setSelectedText(String replacement) : void
+    +setSelectedText(String remplacement) : void
     +removeSelectedText() : void
-    +getMemento() : Memento
-    +setMemento(m : Memento) : void
+
+    +createSnapshot() : Snapshot
+    +restoreSnapshot(snapshot : Snapshot) : void
 }
 
 class "Selection"{
     -offset : int
+
     +Selection() <<constructor>>
+
     +getOffset() : int
     +setOffset(offset : int) : void
 }
@@ -89,84 +128,220 @@ class "Selection"{
 abstract class "Commande"{
     #application : Application
     #editeur : Editeur
+
     +Commande(application : Application, editeur : Editeur) <<constructor>>
+
     +getApplication() : Application
     +getEditeur() : Editeur
+
     {abstract}+execute() : void
 }
 
 class "Copier"{
     +Copier(application : Application, editeur : Editeur) <<constructor>>
+
     +execute() : void
 }
 
 class "Coller"{
     +Coller(application : Application, editeur : Editeur) <<constructor>>
+
     +execute() : void
 }
 
 class "Couper"{
     +Couper(application : Application, editeur : Editeur) <<constructor>>
+
     +execute() : void
 }
 
 class "DeplacerCurseur"{
-    -direction : char
-    +DeplacerCurseur(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    -direction : Direction
+
+    +DeplacerCurseur(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
+
+    +getDirection() : Direction
+
     +execute() : void
-    +getDirection() : char
 }
 
 class "DeplacerSelection"{
-    -direction : char
-    +DeplacerSelection(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    -direction : Direction
+
+    +DeplacerSelection(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
+
+    +getDirection() : Direction
+
     +execute() : void
-    +getDirection() : char
 }
 
 class "Ecrire"{
     -c : char
+
     +Ecrire(application : Application, editeur : Editeur, c : char) <<constructor>>
-    +execute() : void
+
     +getChar() : char
+
+    +execute() : void
 }
 
 class "Supprimer"{
-    -direction : char
-    +Supprimer(application : Application, editeur : Editeur, direction : char) <<constructor>>
+    -direction : Direction
+
+    +Supprimer(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
+
+    +getDirection() : Direction
+
     +execute() : void
-    +getDirection() : char
 }
 
 class "Annuler"{
     +Annuler(application : Application, editeur : Editeur) <<constructor>>
+
+    +execute() : void
+    +script() : void
+}
+
+class "Retablir"{
+    +Retablir(application : Application, editeur : Editeur) <<constructor>>
+
+    +execute() : void
+    +script() : void
+}
+
+class "EnregistrerScript"{
+    +EnregistrerScript(application : Application, editeur : Editeur) <<constructor>>
+
     +execute() : void
 }
 
-class "Refaire"{
-    +Refaire(application : Application, editeur : Editeur) <<constructor>>
+class "RejouerScript"{
+    +RejouerScript(application : Application, editeur : Editeur) <<constructor>>
+
     +execute() : void
 }
 
-class "Memento"{
+class "Copier_2"{
+    +Copier_2(application : Application, editeur : Editeur) <<constructor>>
+
+    +execute() : void
+    +sauvegarde() : void
+    +script() : void
+}
+
+class "Coller_2"{
+    +Coller(application : Application, editeur : Editeur) <<constructor>>
+
+    +execute() : void
+    +sauvegarde() : void
+    +script() : void
+}
+
+class "Couper_2"{
+    +Couper(application : Application, editeur : Editeur) <<constructor>>
+
+    +execute() : void
+    +sauvegarde() : void
+    +script() : void
+}
+
+class "DeplacerCurseur_2"{
+    +DeplacerCurseur(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
+
+    +execute() : void
+    +script();
+}
+
+class "DeplacerSelection_2"{
+    +DeplacerSelection(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
+
+    +execute() : void
+    +script();
+}
+
+class "Ecrire_2"{
+    +Ecrire(application : Application, editeur : Editeur, c : char) <<constructor>>
+
+    +execute() : void
+    +sauvegarde() : void
+    +script() : void
+}
+
+class "Supprimer_2"{
+    +Supprimer(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
+
+    +execute() : void
+    +sauvegarde() : void
+    +script() : void
+}
+
+class "Memoire"{
+    -passe : Stack<Snapshot>
+    -futur : Stack<Snapshot>
+    -present : Snapshot
+
+    +Memoire(present : Snapshot) <<constructor>>
+
+    +getPasse() : Stack<Snapshot>
+    +getFutur() : Stack<Snapshot>
+    +getPresent() : Snapshot
+
+    +sauvegarde(snap : Snapshot) : void
+    +retourPasser() : Snapshot
+    +retourFutur() : Snapshot
+}
+
+class "Snapshot"{
     -texte : StringBuffer
     -curseur : int
-    +Memento(texte : StringBuffer, curseur : int) <<constructor>>
+
+    +Snapshot(texte : StringBuffer, curseur : int) <<constructor>>
+
     +getTexte() : StringBuffer
     +getCurseur() : int
+
+    +clone() : Snapshot
 }
 
-Application *-->"1" Editeur
-Application *-->"1" Fenetre
-Fenetre -->"1" Actionneur
-Fenetre "1"<--*"1" Actionneur
-Actionneur -->"0..n" Commande
-Actionneur -->"1" Application
-Application "1"<-- Commande
-Editeur *-->"1" Selection
-Application *--> Memento
-Editeur --> Memento
+class "Script"{
+    -commandes : List<Commande>
+    -registering : boolean
+
+    +Script() <<constructor>>
+
+    +getCommandes() : List<Commande>
+    +isRegistering() : boolean
+    +setRegistering(registering : boolean) : void
+
+    +reset() : void
+    +jouer() : void
+    +enregistrer(c : Commande) : void
+}
+
+interface "Sauvegardable"{
+    +sauvegarde() : void
+}
+
+interface "Scriptable"{
+    +script() : void
+}
+
+Application -->"1" Editeur
+Application "1"--"1" Fenetre
+Application "1"--"0..n" Commande : > créé des commandes
+Application -->"1" Memoire
+Application -->"1" Script
+Script -->"0..n" Commande
+Memoire -->"1..n" Snapshot
+Fenetre "1"--"1" Actionneur
+Editeur -->"1" Selection
+Editeur "1"-->"0..n" Snapshot : > créé des snapshots
 Commande -->"1" Editeur
+
+DeplacerCurseur -->"1" Direction
+DeplacerSelection -->"1" Direction
+Supprimer -->"1" Direction
+
 Commande <|-- Copier
 Commande <|-- Couper
 Commande <|-- Coller
@@ -174,6 +349,36 @@ Commande <|-- DeplacerCurseur
 Commande <|-- DeplacerSelection
 Commande <|-- Ecrire
 Commande <|-- Supprimer
+
+Actionneur <|-- InputActionneur
+Actionneur <|-- CommandeActionneur
+
+Copier <|-- Copier_2
+Couper <|-- Couper_2
+Coller <|-- Coller_2
+DeplacerCurseur <|-- DeplacerCurseur_2
+DeplacerSelection <|-- DeplacerSelection_2
+Ecrire <|-- Ecrire_2
+Supprimer <|-- Supprimer_2
+
 Commande <|-- Annuler
-Commande <|-- Refaire
+Commande <|-- Retablir
+Commande <|-- EnregistrerScript
+Commande <|-- RejouerScript
+
+Annuler ..|> Scriptable
+Retablir ..|> Scriptable
+Copier_2 ..|> Scriptable
+Couper_2 ..|> Scriptable
+Coller_2 ..|> Scriptable
+DeplacerCurseur_2 ..|> Scriptable
+DeplacerSelection_2 ..|> Scriptable
+Ecrire_2 ..|> Scriptable
+Supprimer_2 ..|> Scriptable
+
+Sauvegardable <|.. Copier_2
+Sauvegardable <|.. Couper_2
+Sauvegardable <|.. Coller_2
+Sauvegardable <|.. Ecrire_2
+Sauvegardable <|.. Supprimer_2
 @enduml

@@ -1,7 +1,7 @@
 @startuml classe
 
 enum "Direction"{
-    HAUT 
+    HAUT
     BAS
     DROITE
     GAUCHE
@@ -25,9 +25,9 @@ class "Application"{
     +deplaceSelection(direction : Direction) : void
     +ecrit(c : char) : void
     +supprime(direction : Direction) : void
-    -initCommandes() : void
     +getCommande(c : char) : Commande
     +run() : void
+    -initCommandes() : void
 }
 
 class "Fenetre"{
@@ -41,7 +41,7 @@ class "Fenetre"{
     -actionneur : Actionneur
 
     +Fenetre(application : Application) <<constructor>>
-    
+
     +getApplication() : Application
     +getTextArea() : JTextArea
     +getHighlighter() : Highlighter
@@ -90,7 +90,7 @@ class "Editeur"{
     -selection : Selection
 
     +Editeur() <<constructor>>
-    
+
     +getTexte() : StringBuffer
     +getCurseur() : int
     +getSelection() : Selection
@@ -102,7 +102,7 @@ class "Editeur"{
     +resetSelection() : void
     +emptySelection() : boolean
     +getSelectedText() : String
-    +setSelectedText(String replacement) : void
+    +setSelectedText(String remplacement) : void
     +removeSelectedText() : void
 }
 
@@ -120,36 +120,36 @@ abstract class "Commande"{
     #editeur : Editeur
 
     +Commande(application : Application, editeur : Editeur) <<constructor>>
-    
+
     +getApplication() : Application
     +getEditeur() : Editeur
-    
+
     {abstract}+execute() : void
 }
 
 class "Copier"{
     +Copier(application : Application, editeur : Editeur) <<constructor>>
-    
+
     +execute() : void
 }
 
 class "Coller"{
     +Coller(application : Application, editeur : Editeur) <<constructor>>
-    
+
     +execute() : void
 }
 
 class "Couper"{
     +Couper(application : Application, editeur : Editeur) <<constructor>>
-    
+
     +execute() : void
 }
 
 class "DeplacerCurseur"{
     -direction : Direction
-    
+
     +DeplacerCurseur(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
-    
+
     +getDirection() : Direction
 
     +execute() : void
@@ -159,7 +159,7 @@ class "DeplacerSelection"{
     -direction : Direction
 
     +DeplacerSelection(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
-    
+
     +getDirection() : Direction
 
     +execute() : void
@@ -167,11 +167,11 @@ class "DeplacerSelection"{
 
 class "Ecrire"{
     -c : char
-    
+
     +Ecrire(application : Application, editeur : Editeur, c : char) <<constructor>>
-    
+
     +getChar() : char
-    
+
     +execute() : void
 }
 
@@ -179,25 +179,22 @@ class "Supprimer"{
     -direction : Direction
 
     +Supprimer(application : Application, editeur : Editeur, direction : Direction) <<constructor>>
-    
+
     +getDirection() : Direction
-    
+
     +execute() : void
 }
 
-Application *-->"1" Editeur
-Application *-->"1" Fenetre
-Application -->"0..n" Commande
-Fenetre *-->"1" Actionneur
-Fenetre "1"<--* Actionneur
-Fenetre *-->"1" Application
-Application "1"<--* Commande
-Editeur *-->"1" Selection
-Commande *-->"1" Editeur
+Application -->"1" Editeur
+Application "1"--"1" Fenetre
+Application "1"--"0..n" Commande : > créé des commandes
+Fenetre "1"--"1" Actionneur
+Editeur -->"1" Selection
+Commande -->"1" Editeur
 
-DeplacerCurseur *-->"1" Direction
-DeplacerSelection *-->"1" Direction
-Supprimer *-->"1" Direction
+DeplacerCurseur -->"1" Direction
+DeplacerSelection -->"1" Direction
+Supprimer -->"1" Direction
 
 Commande <|-- Copier
 Commande <|-- Couper
