@@ -15,10 +15,6 @@ import commande.Supprimer;
 import ui.Fenetre;
 import utilitaire.Direction;
 
-/**
- * Classe au centre de l'application.
- * C'est elle qu'il faut run dans le main.
- */
 public class Application implements Runnable {
 
     private String clipboard = "";
@@ -26,8 +22,9 @@ public class Application implements Runnable {
     private Fenetre fenetre;
     private Map<Character, Callable<Commande>> commandes = new HashMap<Character, Callable<Commande>>();
 
+
     /**
-     * Constructeur de la classe Application.
+     * Application à run pour lancer l'éditeur.
      */
     public Application() {
         this.fenetre = new Fenetre(this);
@@ -124,7 +121,8 @@ public class Application implements Runnable {
      * Permet de récupérer la commande associée à un caractère.
      * 
      * @param c le caractère.
-     * @return la commande associée.
+     * @return la commande associée s'il y en a une, 
+     * null sinon.
      */
     public Commande getCommande(char c) {
         try {

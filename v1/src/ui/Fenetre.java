@@ -107,10 +107,20 @@ public class Fenetre {
         return cursorTag;
     }
 
+    /**
+     * Permet d'obtenir l'actionneur.
+     * 
+     * @return l'actionneur.
+     */
     public Actionneur getActionneur() {
         return actionneur;
     }
 
+    /**
+     * Permet de changer l'actionneur.
+     * 
+     * @param actionneur le nouvel actionneur.
+     */
     public void setActionneur(Actionneur actionneur) {
         textArea.removeKeyListener(this.actionneur);
         this.actionneur = actionneur;

@@ -4,18 +4,15 @@ import main.Application;
 import main.Editeur;
 import utilitaire.Direction;
 
-/**
- * Classe qui gère la suppression.
- */
 public class Supprimer extends Commande {
     private Direction direction;
 
     /**
-     * Constructeur de la classe Supprimer.
+     * Commande qui gère la suppression.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
-     * @param direction   la direction de la suppression.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
+     * @param direction   la direction dans laquelle supprimer.
      */
     public Supprimer(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);

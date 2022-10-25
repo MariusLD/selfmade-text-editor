@@ -3,17 +3,14 @@ package commande;
 import main.Application;
 import main.Editeur;
 
-/**
- * Classe qui gère l'écriture.
- */
 public class Ecrire extends Commande {
     private char c;
 
     /**
-     * Constructeur de la classe Ecrire.
+     * Commande qui gère l'écriture.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      * @param c           le caractère à écrire.
      */
     public Ecrire(Application application, Editeur editeur, char c) {

@@ -3,16 +3,13 @@ package commande;
 import main.Application;
 import main.Editeur;
 
-/**
- * Classe qui gère le coupage.
- */
 public class Couper extends Commande {
 
     /**
-     * Constructeur de la classe Couper.
+     * Commande qui gère le coupage.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Couper(Application application, Editeur editeur) {
         super(application, editeur);

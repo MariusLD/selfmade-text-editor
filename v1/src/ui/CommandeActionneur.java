@@ -7,6 +7,12 @@ import utilitaire.Direction;
 
 public class CommandeActionneur extends Actionneur {
 
+    /**
+     * Représente l'état de l'actionneur pour appeller des commandes
+     * et déplacer la sélection.
+     * 
+     * @param fenetre la fenêtre utilisant cet Actionneur.
+     */
     public CommandeActionneur(Fenetre fenetre) {
         super(fenetre);
     }
