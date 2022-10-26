@@ -12,10 +12,10 @@ public abstract class Commande {
     protected Editeur editeur;
 
     /**
-     * Constructeur de la classe Commande.
+     * Classe abstraite représentant une commande.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette Commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Commande(Application application, Editeur editeur) {
         this.application = application;

@@ -7,15 +7,17 @@ import utilitaire.Scriptable;
 import utilitaire.Sauvegardable;
 
 /**
- * Classe qui gère le collage.
+ * Commande qui gère le collage et implémente les interfaces
+ * Scriptable et Sauvegardable.
  */
 public class Coller_2 extends Coller implements Sauvegardable, Scriptable {
 
     /**
-     * Constructeur de la classe Coller.
+     * Commande qui gère le collage et implémente les interfaces
+     * Scriptable et Sauvegardable.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Coller_2(Application application, Editeur editeur) {
         super(application, editeur);
@@ -23,8 +25,8 @@ public class Coller_2 extends Coller implements Sauvegardable, Scriptable {
     }
 
     /**
-     * Sauvegarde l'état, puis remplace le texte sélectionné par le contenu du
-     * presse-papier.
+     * Remplace le texte sélectionné par le contenu du presse-papier,
+     * puis sauvegarde l'état de l'éditeur.
      */
     @Override
     public void execute() {

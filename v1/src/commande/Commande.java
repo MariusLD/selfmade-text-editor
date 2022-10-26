@@ -3,6 +3,9 @@ package commande;
 import main.Application;
 import main.Editeur;
 
+/**
+ * Classe abstraite représentant une commande.
+ */
 public abstract class Commande {
 
     protected Application application;

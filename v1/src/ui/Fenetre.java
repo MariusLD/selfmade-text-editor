@@ -16,8 +16,7 @@ import main.Application;
 import main.Editeur;
 
 /**
- * Classe au centre de l'application.
- * Elle gère l'affichage.
+ * Classe qui gère l'affichage de l'application.
  */
 public class Fenetre {
 
@@ -35,9 +34,9 @@ public class Fenetre {
     private Actionneur actionneur;
 
     /**
-     * Constructeur de la classe Fenetre.
+     * Fenètre gérant l'affichage de l'application.
      * 
-     * @param application l'application.
+     * @param application l'application créant cette fenètre.
      */
     public Fenetre(Application application) {
         this.application = application;

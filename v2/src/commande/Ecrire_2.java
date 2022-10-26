@@ -7,15 +7,17 @@ import utilitaire.Scriptable;
 import utilitaire.Sauvegardable;
 
 /**
- * Classe qui gère l'écriture.
+ * Commande qui gère l'écriture et implémente les interfaces
+ * Scriptable et Sauvegardable.
  */
 public class Ecrire_2 extends Ecrire implements Sauvegardable, Scriptable {
 
     /**
-     * Constructeur de la classe Ecrire.
+     * Commande qui gère l'écriture et implémente les interfaces
+     * Scriptable et Sauvegardable.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      * @param c           le caractère à écrire.
      */
     public Ecrire_2(Application application, Editeur editeur, char c) {
@@ -23,6 +25,11 @@ public class Ecrire_2 extends Ecrire implements Sauvegardable, Scriptable {
         script();
     }
 
+    /**
+     * Ecrit le caractère, au niveau du curseur,
+     * ou remplace le texte sélectionné par le caractère,
+     * puis sauvegarde l'état de l'éditeur.
+     */
     @Override
     public void execute() {
         super.execute();

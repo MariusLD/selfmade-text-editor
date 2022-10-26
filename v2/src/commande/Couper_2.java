@@ -7,15 +7,17 @@ import utilitaire.Scriptable;
 import utilitaire.Sauvegardable;
 
 /**
- * Classe qui gère le coupage.
+ * Commande qui gère le coupage et implémente les interfaces
+ * Scriptable et Sauvegardable.
  */
 public class Couper_2 extends Couper implements Sauvegardable, Scriptable {
 
     /**
-     * Constructeur de la classe Couper.
+     * Commande qui gère le coupage et implémente les interfaces
+     * Scriptable et Sauvegardable.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Couper_2(Application application, Editeur editeur) {
         super(application, editeur);
@@ -23,8 +25,8 @@ public class Couper_2 extends Couper implements Sauvegardable, Scriptable {
     }
 
     /**
-     * Sauvegarde l'état, puis copie le texte sélectionné dans le presse-papier et
-     * le supprime.
+     * Copie le texte sélectionné dans le presse-papier et le supprime,
+     * puis sauvegarde l'état de l'éditeur.
      */
     @Override
     public void execute() {

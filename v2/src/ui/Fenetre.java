@@ -16,15 +16,14 @@ import main.Application;
 import main.Editeur;
 
 /**
- * Classe au centre de l'application.
- * Elle gère l'affichage.
+ * Classe qui gère l'affichage de l'application.
  */
 public class Fenetre {
 
     private Application application;
     private JTextArea textArea = new JTextArea();
 
-    private Highlighter highlighter = textArea.getHighlighter();;
+    private Highlighter highlighter = textArea.getHighlighter();
 
     private HighlightPainter selectionPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
     private HighlightPainter cursorPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);
@@ -35,9 +34,9 @@ public class Fenetre {
     private Actionneur actionneur;
 
     /**
-     * Constructeur de la classe Fenetre.
+     * Fenètre gérant l'affichage de l'application.
      * 
-     * @param application l'application.
+     * @param application l'application créant cette fenètre.
      */
     public Fenetre(Application application) {
         this.application = application;
@@ -107,10 +106,20 @@ public class Fenetre {
         return cursorTag;
     }
 
+    /**
+     * Permet d'obtenir l'actionneur.
+     * 
+     * @return l'actionneur.
+     */
     public Actionneur getActionneur() {
         return actionneur;
     }
 
+    /**
+     * Permet de changer l'actionneur.
+     * 
+     * @param actionneur le nouvel actionneur.
+     */
     public void setActionneur(Actionneur actionneur) {
         textArea.removeKeyListener(this.actionneur);
         this.actionneur = actionneur;
@@ -189,11 +198,17 @@ public class Fenetre {
         textArea.addKeyListener(actionneur);
     }
 
+    /**
+     * Change la couleur de la sélection et du curseur pour une teinte rouge.
+     */
     public void setTeinteRouge() {
         selectionPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.PINK);
         cursorPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.RED);
     }
 
+    /**
+     * Change la couleur de la sélection et du curseur pour une teinte grise.
+     */
     public void setTeinteGrise() {
         selectionPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.LIGHT_GRAY);
         cursorPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.DARK_GRAY);

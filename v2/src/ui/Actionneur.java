@@ -2,14 +2,17 @@ package ui;
 
 import java.awt.event.KeyAdapter;
 
+/**
+ * Classe abstraite qui permet de gérer les évènements clavier.
+ */
 public abstract class Actionneur extends KeyAdapter {
 
     protected Fenetre fenetre;
 
     /**
-     * Constructeur de la classe Actionneur.
+     * Classe abstraite qui permet de gérer les évènements clavier.
      * 
-     * @param fenetre la fenêtre.
+     * @param fenetre la fenêtre utilisant cet Actionneur.
      */
     public Actionneur(Fenetre fenetre) {
         this.fenetre = fenetre;
@@ -24,6 +27,11 @@ public abstract class Actionneur extends KeyAdapter {
         return fenetre;
     }
 
+    /**
+     * Permet de changer l'etat de l'actionneur.
+     * 
+     * @param actionneur le nouvel etat de l'actionneur.
+     */
     protected void changeActionneur(Actionneur actionneur) {
         fenetre.setActionneur(actionneur);
     }

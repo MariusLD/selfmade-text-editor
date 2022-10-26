@@ -2,6 +2,9 @@ package ui;
 
 import java.awt.event.KeyAdapter;
 
+/**
+ * Classe abstraite qui permet de gérer les évènements clavier.
+ */
 public abstract class Actionneur extends KeyAdapter {
 
     protected Fenetre fenetre;

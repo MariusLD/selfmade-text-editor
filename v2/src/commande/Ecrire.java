@@ -4,16 +4,16 @@ import main.Application;
 import main.Editeur;
 
 /**
- * Classe qui gère l'écriture.
+ * Commande qui gère l'écriture.
  */
 public class Ecrire extends Commande {
     private char c;
 
     /**
-     * Constructeur de la classe Ecrire.
+     * Commande qui gère l'écriture.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      * @param c           le caractère à écrire.
      */
     public Ecrire(Application application, Editeur editeur, char c) {
@@ -34,8 +34,8 @@ public class Ecrire extends Commande {
      */
     @Override
     public void execute() {
-        if (!editeur.emptySelection()) {
-            editeur.removeSelectedText();
+        if (!editeur.emptySelection()) { // si la sélection n'est pas vide
+            editeur.removeSelectedText(); // on remplace le texte sélectionné par le caractère
             editeur.resetSelection();
         }
         editeur.writeChar(c);

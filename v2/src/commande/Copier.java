@@ -4,15 +4,15 @@ import main.Application;
 import main.Editeur;
 
 /**
- * Classe qui gère la copie.
+ * Commande qui gère la copie.
  */
 public class Copier extends Commande {
 
     /**
-     * Constructeur de la classe Copier.
+     * Commande qui gère la copie.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Copier(Application application, Editeur editeur) {
         super(application, editeur);

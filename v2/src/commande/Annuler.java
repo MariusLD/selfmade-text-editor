@@ -7,15 +7,17 @@ import main.Snapshot;
 import utilitaire.Scriptable;
 
 /**
- * Classe qui gère l'annulation d'une action.
+ * Commande qui gère l'annulation d'une action et implémente
+ * l'interface Scriptable.
  */
 public class Annuler extends Commande implements Scriptable {
 
     /**
-     * Constructeur de la classe Annuler.
+     * Commande qui gère l'annulation d'une action et implémente
+     * l'interface Scriptable.
      * 
-     * @param application L'application.
-     * @param editeur     L'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Annuler(Application application, Editeur editeur) {
         super(application, editeur);

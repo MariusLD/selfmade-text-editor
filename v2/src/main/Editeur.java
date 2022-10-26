@@ -40,24 +40,6 @@ public class Editeur {
     }
 
     /**
-     * Permet de définir le curseur.
-     * 
-     * @param curseur la nouvelle position du curseur.
-     */
-    public void setCurseur(int curseur) {
-        this.curseur = curseur;
-    }
-
-    /**
-     * Permet de définir le buffer.
-     * 
-     * @param texte le nouveau buffer.
-     */
-    public void setTexte(StringBuffer texte) {
-        this.texte = texte;
-    }
-
-    /**
      * Permet d'ajouter un caractère au buffer.
      * L'ajout se fait à la position du curseur.
      * 
@@ -184,16 +166,16 @@ public class Editeur {
     /**
      * Permet de remplacer le texte sélectionné par un autre texte.
      * 
-     * @param replacement le texte de remplacement.
+     * @param remplacement le texte de remplacement.
      */
-    public void setSelectedText(String replacement) {
+    public void setSelectedText(String remplacement) {
         int off = selection.getOffset();
         if (off < 0) {
-            this.texte.replace(curseur + off, curseur, replacement);
-            curseur += off + replacement.length();
+            this.texte.replace(curseur + off, curseur, remplacement);
+            curseur += off + remplacement.length();
         } else {
-            this.texte.replace(curseur, curseur + off, replacement);
-            curseur += replacement.length();
+            this.texte.replace(curseur, curseur + off, remplacement);
+            curseur += remplacement.length();
         }
     }
 

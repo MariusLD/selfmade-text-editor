@@ -8,16 +8,18 @@ import utilitaire.Direction;
 import utilitaire.Sauvegardable;
 
 /**
- * Classe qui gère la suppression.
+ * Commande qui gère la suppression et implémente les interfaces
+ * Scriptable et Sauvegardable.
  */
 public class Supprimer_2 extends Supprimer implements Sauvegardable, Scriptable {
 
     /**
-     * Constructeur de la classe Supprimer.
+     * Commande qui gère la suppression et implémente les interfaces
+     * Scriptable et Sauvegardable.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
-     * @param direction   la direction de la suppression
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
+     * @param direction   la direction dans laquelle supprimer.
      */
     public Supprimer_2(Application application, Editeur editeur, Direction direction) {
         super(application, editeur, direction);
@@ -25,8 +27,9 @@ public class Supprimer_2 extends Supprimer implements Sauvegardable, Scriptable 
     }
 
     /**
-     * Sauvegarde l'état, puis supprime le caractère avant ou après le curseur,
-     * ou supprime le texte sélectionné.
+     * Supprime le caractère avant ou après le curseur,
+     * ou supprime le texte sélectionné,
+     * puis sauvegarde l'état de l'éditeur.
      */
     @Override
     public void execute() {

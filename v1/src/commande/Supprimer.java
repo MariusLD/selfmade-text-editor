@@ -4,6 +4,9 @@ import main.Application;
 import main.Editeur;
 import utilitaire.Direction;
 
+/**
+ * Commande qui gère la suppression.
+ */
 public class Supprimer extends Commande {
     private Direction direction;
 
@@ -32,8 +35,8 @@ public class Supprimer extends Commande {
      */
     @Override
     public void execute() {
-        if (!editeur.emptySelection()) {
-            editeur.removeSelectedText();
+        if (!editeur.emptySelection()) { // si la sélection n'est pas vide
+            editeur.removeSelectedText(); // on supprime le texte sélectionné
             editeur.resetSelection();
         } else {
             editeur.deleteChar(direction);

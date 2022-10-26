@@ -5,17 +5,17 @@ import main.Editeur;
 import utilitaire.Direction;
 
 /**
- * Classe qui gère le déplacement du curseur.
+ * Commande qui gère le déplacement du curseur.
  */
 public class DeplacerCurseur extends Commande {
     private Direction direction;
 
     /**
-     * Constructeur de la classe DeplacerCurseur.
+     * Commande qui gère le déplacement du curseur.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
-     * @param direction   la direction du déplacement.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
+     * @param direction   la direction dans laquelle déplacer le curseur.
      */
     public DeplacerCurseur(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);

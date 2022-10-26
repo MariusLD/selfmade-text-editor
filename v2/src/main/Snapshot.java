@@ -1,7 +1,7 @@
 package main;
 
 /**
- * Classe qui gère les sauvegardes.
+ * Classe représentant une sauvegarde de l'éditeur.
  */
 public class Snapshot implements Cloneable {
 
@@ -9,7 +9,7 @@ public class Snapshot implements Cloneable {
     private int curseur;
 
     /**
-     * Constructeur de la classe Snapshot.
+     * Créé une sauvegarde de l'éditeur.
      * 
      * @param texte   le buffer.
      * @param curseur la position du curseur.

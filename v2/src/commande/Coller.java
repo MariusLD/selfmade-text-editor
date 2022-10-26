@@ -4,15 +4,15 @@ import main.Application;
 import main.Editeur;
 
 /**
- * Classe qui gère le collage.
+ * Commande qui gère le collage.
  */
 public class Coller extends Commande {
 
     /**
-     * Constructeur de la classe Coller.
+     * Commande qui gère le collage.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Coller(Application application, Editeur editeur) {
         super(application, editeur);

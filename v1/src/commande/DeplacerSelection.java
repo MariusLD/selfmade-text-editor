@@ -4,6 +4,9 @@ import main.Application;
 import main.Editeur;
 import utilitaire.Direction;
 
+/**
+ * Commande qui gère le déplacement de la sélection.
+ */
 public class DeplacerSelection extends Commande {
     private Direction direction;
 

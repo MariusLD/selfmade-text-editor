@@ -20,8 +20,7 @@ import ui.Fenetre;
 import utilitaire.Direction;
 
 /**
- * Classe au centre de l'application.
- * C'est elle qu'il faut run dans le main.
+ * Application à run pour lancer l'éditeur.
  */
 public class Application implements Runnable {
 
@@ -34,7 +33,7 @@ public class Application implements Runnable {
     private Memoire memoire = new Memoire(editeur.createSnapshot());
 
     /**
-     * Constructeur de la classe Application.
+     * Application à run pour lancer l'éditeur.
      */
     public Application() {
         this.fenetre = new Fenetre(this);
@@ -104,27 +103,54 @@ public class Application implements Runnable {
         this.clipboard = clipboard;
     }
 
+    /**
+     * Initialise et execute une commande DeplacerCurseur.
+     * 
+     * @param direction la direction dans laquelle le curseur doit se déplacer.
+     */
     public void deplaceCurseur(Direction direction) {
         new DeplacerCurseur_2(this, editeur, direction).execute();
         fenetre.refreshSelectionHighlight();
         fenetre.refreshCursorHighlight();
     }
 
+    /**
+     * Initialise et execute une commande DeplacerSelection.
+     * 
+     * @param direction la direction dans laquelle la sélection doit se déplacer.
+     */
     public void deplaceSelection(Direction direction) {
         new DeplacerSelection_2(this, editeur, direction).execute();
         fenetre.refreshSelectionHighlight();
     }
 
+    /**
+     * Initialise et execute une commande Ecrire.
+     * 
+     * @param caractere le caractère à écrire.
+     */
     public void ecrit(char c) {
         new Ecrire_2(this, editeur, c).execute();
         fenetre.refreshText();
     }
 
+    /**
+     * Initialise et execute une commande Supprimer.
+     * 
+     * @param direction la direction dans laquelle le caractère doit être supprimé.
+     */
     public void supprime(Direction direction) {
         new Supprimer_2(this, editeur, direction).execute();
         fenetre.refreshText();
     }
 
+    /**
+     * Permet de récupérer la commande associée à un caractère.
+     * 
+     * @param c le caractère.
+     * @return la commande associée s'il y en a une,
+     *         null sinon.
+     */
     public Commande getCommande(char c) {
         try {
             return commandes.get(c).call();
@@ -140,6 +166,9 @@ public class Application implements Runnable {
         fenetre.show();
     }
 
+    /**
+     * Initialise la map des commandes.
+     */
     private void initCommandes() {
         commandes.put('c', () -> new Copier_2(this, editeur));
         commandes.put('v', () -> new Coller_2(this, editeur));

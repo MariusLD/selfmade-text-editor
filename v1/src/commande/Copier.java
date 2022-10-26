@@ -3,6 +3,9 @@ package commande;
 import main.Application;
 import main.Editeur;
 
+/**
+ * Commande qui gère la copie.
+ */
 public class Copier extends Commande {
 
     /**

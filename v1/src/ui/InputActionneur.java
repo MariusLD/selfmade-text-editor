@@ -4,6 +4,10 @@ import java.awt.event.KeyEvent;
 
 import utilitaire.Direction;
 
+/**
+ * Représente l'état de l'actionneur pour écrire, supprimer
+ * et déplacer le curseur.
+ */
 public class InputActionneur extends Actionneur {
 
     /**

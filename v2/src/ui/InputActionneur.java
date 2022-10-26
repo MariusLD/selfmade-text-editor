@@ -5,15 +5,16 @@ import java.awt.event.KeyEvent;
 import utilitaire.Direction;
 
 /**
- * Classe qui permet de gérer les actions de l'utilisateur.
- * C'est elle qui va créer les commandes et les exécuter.
+ * Représente l'état de l'actionneur pour écrire, supprimer
+ * et déplacer le curseur.
  */
 public class InputActionneur extends Actionneur {
 
     /**
-     * Constructeur de la classe InputActionneur.
+     * Représente l'état de l'actionneur pour écrire, supprimer
+     * et déplacer le curseur.
      * 
-     * @param fenetre la fenêtre.
+     * @param fenetre la fenêtre utilisant cet Actionneur.
      */
     public InputActionneur(Fenetre fenetre) {
         super(fenetre);

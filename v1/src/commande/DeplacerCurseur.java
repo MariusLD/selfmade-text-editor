@@ -4,6 +4,9 @@ import main.Application;
 import main.Editeur;
 import utilitaire.Direction;
 
+/**
+ * Commande qui gère le déplacement du curseur.
+ */
 public class DeplacerCurseur extends Commande {
     private Direction direction;
 

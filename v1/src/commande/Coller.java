@@ -3,6 +3,9 @@ package commande;
 import main.Application;
 import main.Editeur;
 
+/**
+ * Commande qui gère le collage.
+ */
 public class Coller extends Commande {
 
     /**

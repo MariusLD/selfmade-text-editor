@@ -4,18 +4,18 @@ import main.Application;
 import main.Editeur;
 import utilitaire.Direction;
 
-/***
- * Classe qui gère le déplacement de la sélection.
+/**
+ * Commande qui gère le déplacement de la sélection.
  */
 public class DeplacerSelection extends Commande {
     private Direction direction;
 
     /**
-     * Constructeur de la classe DeplacerSelection.
+     * Commande qui gère le déplacement de la sélection.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
-     * @param direction   la direction du déplacement.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
+     * @param direction   la direction dans laquelle déplacer la sélection.
      */
     public DeplacerSelection(Application application, Editeur editeur, Direction direction) {
         super(application, editeur);

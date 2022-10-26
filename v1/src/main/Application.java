@@ -15,13 +15,15 @@ import commande.Supprimer;
 import ui.Fenetre;
 import utilitaire.Direction;
 
+/**
+ * Application à run pour lancer l'éditeur.
+ */
 public class Application implements Runnable {
 
     private String clipboard = "";
     private Editeur editeur = new Editeur();
     private Fenetre fenetre;
     private Map<Character, Callable<Commande>> commandes = new HashMap<Character, Callable<Commande>>();
-
 
     /**
      * Application à run pour lancer l'éditeur.
@@ -121,8 +123,8 @@ public class Application implements Runnable {
      * Permet de récupérer la commande associée à un caractère.
      * 
      * @param c le caractère.
-     * @return la commande associée s'il y en a une, 
-     * null sinon.
+     * @return la commande associée s'il y en a une,
+     *         null sinon.
      */
     public Commande getCommande(char c) {
         try {

@@ -7,16 +7,17 @@ import utilitaire.Scriptable;
 import main.Snapshot;
 
 /**
- * Classe qui gère la restauration d'un état après l'annulation
- * d'une commande.
+ * Commande qui gère le rétablissement d'une action et implémente
+ * l'interface Scriptable.
  */
 public class Retablir extends Commande implements Scriptable {
 
     /**
-     * Constructeur de la classe Refaire.
+     * Commande qui gère le rétablissement d'une action et implémente
+     * l'interface Scriptable.
      * 
-     * @param application l'application.
-     * @param editeur     l'éditeur.
+     * @param application l'application créant cette commande.
+     * @param editeur     l'éditeur sur lequel agir.
      */
     public Retablir(Application application, Editeur editeur) {
         super(application, editeur);
@@ -24,8 +25,7 @@ public class Retablir extends Commande implements Scriptable {
     }
 
     /**
-     * Rétabli l'état de la dernière commande annulée,
-     * puis sauvegarde l'état.
+     * Rétabli l'état de l'éditeur ayant été annulé précédemment.
      */
     @Override
     public void execute() {
