@@ -1,0 +1,26 @@
+@startuml etat_actionneur
+state "Mode Input" as input
+state "Mode Commande" as commande
+state f1 <<fork>>
+state f2 <<fork>>
+state f3 <<fork>>
+state f4 <<fork>>
+
+[*] -> input
+input -down-> f1 : **touche pressée**
+f1 -down-> commande : Échap / passage mode commande
+f1 --> input : flèche directionnelle / déplacement curseur
+f1 --> input : autre / rien
+
+input -up-> f2 : **touche tapée**
+f2 --> input : Retour ou Suppr / suppression
+f2 --> input : charactère imprimable ou Entrée / ajout
+f2 --> input : autre / rien
+
+commande -up-> input : **touche Échap relachée** / passage mode input
+commande --> f3 : **touche pressée**
+f3 --> commande : flèche directionnelle / déplacement sélection
+f3 -down-> f4 : autre / récupération commande associée
+f4 --> commande : commande récupérée / exécution
+f4 --> commande : null / rien
+@enduml
