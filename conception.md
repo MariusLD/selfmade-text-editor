@@ -1,4 +1,4 @@
-# Diagrammes de classe
+# Diagramme de classe
 
 ## Structure de la V1
 
@@ -88,9 +88,33 @@ Ces deux attributs sont récuparables via les méthodes getCommandes() et isRegi
 Finalement, à la création d'une commande qui implémente Scriptable, nous appelons sa méthode Script, si le script enregistre (qui est activé par un execute de la commande EnregistrerScript) alors elle est ajoutée à la file du Script sinon il ne se passe rien. Lorsque la commande EnregistrerScript() est effectuée de nouveau elle coupe l'enregistrement, nous utilisons alors la méthode setRegistering(boolean) qui indique que l'enregistrement a stoppé.
 Quand cet enregistrement a cessé, nous avons alors une liste d'actions en attente qu'il est possible de rejouer à n'importe quel moment et n'importe où dans notre buffer avec la nouvelle commande RejouerScript(), et ce, autant de fois que nous le voulons.
 
+# Diagrammes de séquence
+
+## Diagrammes associés à la V1
+
+Dans ce premier diagramme de séquence, l'utilisateur écrit un caractère. L'InputActionneur capture l'évènement du clavier, et va appeler la méthode ecrit de l'application. Cette méthode va créer une nouvelle instance d'Ecrire et l'exécuter. L'instance d'Ecrire va appeler la méthode writeChar de l'éditeur, qui va ajouter le caractère au buffer et avancer le curseur. L'application va ensuite appeler la méthode refreshText de la fenêtre, qui va rafraichir l'affichage du texte et du curseur.
+
+![alt text](https://github.com/12-3-8-s9b9o9j9t/TP2/blob/master/images/seqV1_1.png?raw=true)
+  
+Dans ce second diagramme de séquence, l'utilisateur appuie sur la touche Échap pour passer en mode commande. L'InputActionneur va donc créer un nouveau CommandAcionneur et le passer à la fenêtre. L'utilisateur appuie ensuite sur la flèche gauche pour déplacer la sélection. Le CommandeActionneur va appeler la méthode deplaceSelection de l'application en précisant la direction GAUCHE. L'application crée une nouvelle instance de DeplacerSelection et l'exécute. L'instance de DeplacerSelection va appeler la méthode moveSelection de l'éditeur, qui va réduire l'offset de la sélection de 1. L'application demande ensuite à la fenêtre de rafraichir l'affichage de la sélection. Enfin, l'utilisateur appuie sur la touche 'x'. Le CommandeActionneur va récupérer la commande associée via l'application et l'exécuter. L'instance de couper va récupérer le texte sélectionné depuis l'éditeur, le copier dans le clipboard de l'application, puis demander à l'éditeur de le supprimer, et de réinitialiser la sélection. Enfin l'application demande à la fenêtre de rafraichir l'affichage du texte, ce qui rafraichit aussi l'affichage du curseur.
+
+![alt text](https://github.com/12-3-8-s9b9o9j9t/TP2/blob/master/images/seqV1_2.png?raw=true)
+
+## Diagrammes associés à la V2
+  
+Ce qui a changé par rapport à la v1 c'est tout d'abord l'utilisation d'une instance de Ecrire_2 au lieu de Ecrire. Elle va donc vérifier si le script est en train d'être enregistré à sa construction, pour venir s'y ajouter ou non. De plus, à la fin de son exécution la commande Ecrire_2 va appeler sa méthode sauvegarde, qui va créer une snapshot de l'état de l'éditeur, et l'envoyer à la mémoire.
+  
+![alt text](https://github.com/12-3-8-s9b9o9j9t/TP2/blob/master/images/seqV2_1.png?raw=true)
+  
+Dans la v2, le passage au mode commande n'a pas changé, ni la façon qu'à le CommandeActionneur de récupérer la commande associée à la touche appuyée. Ici la commande Annuler va comme Ecrire_2 précédemment, s'enregistrer dans le script s'il est en train d'enregistrer. Puis à son exécution, elle va récupérer la snapshot précédente de la mémoire grâce à la méthode retourPasse, et demander à l'éditeur de restaurer l'état représenté par cette snapshot. Enfin, elle ne créé pas de sauvegarde de l'état de l'éditeur après son exécution car cela n'aurait pas de sens.
+  
+![alt text](https://github.com/12-3-8-s9b9o9j9t/TP2/blob/master/images/seqV2_2.png?raw=true)
+  
 # Diagramme d'états
 
 Ce diagramme permet d'envisager les différentes actions qu'un utilisateur peut faire lorsqu'il utilise notre programme, et donc ses différents états.
 Dans un premier temps l'utilisateur est dans un mode Input, c'est à dire qu'il a la possibilité de taper une touche de son clavier. Soit il s'agit d'un caractère imprimable et dans ce cas il va s'inscrire dans la zone de texte visible pas l'utilisateur, soit il s'agit de la touche Retour/Suppr et dans ce cas il y a supression du dernier caractère imprimable inscrit, si il y en a un. Sinon, si la touche tapée n'est ni un caractère imprimable ni la touche Retour/Suppr dans ce mode Input, rien ne se passe et on retour à notre état initial où on peut appuyer sur une autre touche.
 
 Sinon, si une touche est pressée il y a plusieurs autres options. Soit il s'agit d'une flèche directionnelle, dans ce cas le curseur se déplacera dans la direction donnée par la flèche, tant qu'il le peut et autant de fois que l'utilisateur presse la touche. Ou bien il presse la touche Echap, et dans ce cas il passera en mode Commande. Ce mode offre de nouvelles possiblités : s'il relâche la touche pressée Echap, il reviendra automatiquement à l'état mode Input, tant qu'il la maintient enfoncée il reste dans l'état actuel. Si une touche est pressée dans cet état, il y a différents cas de figure : il peut s'agir d'une flèche directionnelle, alors il modifie la sélection et peut l'aggrandir ou la réduire dans un sens ou dans l'autre en pressant une nouvelle fois une flèche directionnelle, ou bien il presse une touche qui peut : soit correspondre à une commande existante dans ce cas la commande sera récupérée et exécutée il revient alors à au mode Commande et peut presser une autre touche ou revenir au mode Input, ou bien la touche pressée ne correspond à rien et rien ne s'exécute il a une nouvelle fois le choix de relancer une autre commande/modifier la sélection ou revenir au mode Input.
+
+![alt text](https://github.com/12-3-8-s9b9o9j9t/TP2/blob/master/images/etat.png?raw=true)
