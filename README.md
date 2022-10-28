@@ -6,6 +6,10 @@ Le projet consiste en la création d'un _**éditeur de texte**_ simplifié en im
 
 L'intérêt au travers de ce projet était avant tout d'élaborer les différentes étapes d'organisation du programme, en passant par sa conception, mettre en oeuvre la collaboration entre ses différents objets, ainsi qu'imaginer le patron de conception sur lequel se baser afin de mettre en place une première version du programme grâce au principe _**SOLID**_ et l'étendre pour une seconde version avec quelques fonctionnalités supplémentaires plus poussées. ✅
 
+La version 1 se trouve dans le dossier v1, il est possible de lancer le programme avec le jar ou depuis le main dans le package main.  
+La version 2 se trouve dans le dossier v2, il est possible de lancer le programme avec le jar ou depuis le main dans le package main.
+Nous pouvons également retrouver le dossier de conception dans le fichier _**conception.md**_ ainsi que le dossier développeur dans le fichier _**developpeur.md**_.
+
 ## ⚙️ La liste des différents raccourcis claviers permettant de tester pleinement les fonctionnalités de l'éditeur de texte ⚙️ 
 
 ### Version 1️⃣ et Version 2️⃣ :
