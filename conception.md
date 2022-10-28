@@ -9,7 +9,7 @@ Dans un premier temps nous avons la classe Application, une classe maitresse de 
 - Enfin nous avons l'attribut editeur, qui correspond à l'éditeur lié à nottre Application, puisqu'en effet une application détient un unique Editeur, qui s'occupe de la gestion du buffer de texte qui apparaît sur la Fenetre ainsi que de la gestion de la Selection de texte. Cet Editeur unique est récupérable par la méthode getEditeur().
 
 Ensuite, nous avons la méthode ecrit(char) qui va recevoir l'informatiton d'une touche pressée sans considérer les moments où des commandes sont renttrées avec Echap, et qui va renvoyer l'information à l'Editeur qu'il doit changer son buffer afin que l'affichage soit par la suite le résultat de la touche actionnée par l'utilisateur.
-Il existe également quelques "requêtes" sous forme de commandes qui ne sont pas dans la Map puisqu'elles nécessitent un paramètre Direction en entrée qui permet ainsi de savoir dans quel sens on se déplace. La Direction est une énumération entre HAUT/BAS/DROITE/GAUCHE. En fonction dans l'état d'édition dans lequel nous sommes (Echap ou non pressé) nous avons deux méthodes qui peuvent être appelées, soit deplaceCurseur soit deplaceSelection, qui dans un cas va seulement déplacer le curseur en modifiant l'atttribut de l'Editeur lié et dans l'autre va modifier la zone de texte sélectionnée qui est également un attribut d'Editeur que nous verrons ensuite. La méthode supprime utilise le même principe avec le paramètre Direction mais dans son cas il s'agit de déterminer dans quelle direction il faut supprimer.
+Il existe également quelques "requêtes" sous forme de commandes qui ne sont pas dans la Map puisqu'elles nécessitent un paramètre Direction en entrée qui permet ainsi de savoir dans quel sens on se déplace. La Direction est une énumération entre HAUT/BAS/DROITE/GAUCHE. En fonction dans l'état d'édition dans lequel nous sommes (Echap ou non pressé) nous avons deux méthodes qui peuvent être appelées, soit deplaceCurseur soit deplaceSelection, qui dans un cas va seulement déplacer le curseur en modifiant l'attribut de l'Editeur lié et dans l'autre va modifier la zone de texte sélectionnée qui est également un attribut d'Editeur que nous verrons ensuite. La méthode supprime utilise le même principe avec le paramètre Direction mais dans son cas il s'agit de déterminer dans quelle direction il faut supprimer.
   
   ## ➤ Fenetre
   
@@ -49,6 +49,38 @@ Désormais, la classe Applicatiton possède un nouvel attribut memoire de type M
   
  ## ➤ Memoire
   
-La Memoire se sert d'une autre classe : Snapshot (que nous aborderons ensuite) afin de sauvegarder des états de l'édition sur l'éditeur de texte. Ces états se découpent en 3 catégories : l'état présent, les états "futurs" qui étaient d'anciens états présentts, les états passés qui sont d'anciens états présents, successivement : present, futur, passe. Le premier est modélisé directement par une snapshot c'est-à-dire un unique état, tandis que les deux autres sont modélisés par des Stack. Les Stack sont très utiles dans notre cas pour bénifier du LIFO car ces Stack vont être grandement solicitées. Il est possible de récupérer ces trois attributs avec les métthodes getPasse(), getFutur(), getPresent(). 
-Pour enregistrer l'état courant, nous utilisons la méthode sauvegar(Snapshot) où on recoit une nouvelle Snapshot à définir comme la Snapshot present, en attendant nous prenons la Snapshott present que nous envoyons en haut de la Stack passe pour signaler que c'était l'état précédent, et nous nettoyons la Stack futur pour montrer que nous sommes dans un nouvel état que nous avons pas encore parcouru dans le futur.
+La Memoire se sert d'une autre classe : Snapshot (que nous aborderons ensuite) afin de sauvegarder des états de l'édition sur l'éditeur de texte. Ces états se découpent en 3 catégories : l'état présent, les états "futurs" qui étaient d'anciens états présents, les états passés qui sont d'anciens états présents, successivement : present, futur, passe. Le premier est modélisé directement par une snapshot c'est-à-dire un unique état, tandis que les deux autres sont modélisés par des Stack. Les Stack sont très utiles dans notre cas pour bénifier du LIFO car ces Stack vont être grandement solicitées. Il est possible de récupérer ces trois attributs avec les méthodes getPasse(), getFutur(), getPresent(). 
+Pour enregistrer l'état courant, nous utilisons la méthode sauvegarde(Snapshot) où on recoit une nouvelle Snapshot à définir comme la Snapshot present, en attendant nous prenons la Snapshott present que nous envoyons en haut de la Stack passe pour signaler que c'était l'état précédent, et nous nettoyons la Stack futur pour montrer que nous sommes dans un nouvel état que nous avons pas encore parcouru dans le futur.
 La méthode retourPasser() permet de remettre la Snapshot en haut de passe à la place de la Snapshot present, cette dernière va passer au dessus de futur pour y revenir si besoin. Et inversement pour retourFutur() où restaure l'ancienne Snapshot après être revenu en arrière et en mettant la Snapshot present dans la Stack passe.
+
+## ➤ Snapshot
+  
+La Snapshot est, comme dit plus tôt, un état de la mémoire. En effet, elle va se rappeler des éléments du buffer de l'Editeur afin de pouvoir recharger cet état dans la mémoire lorsque nous en avons besoin avec les méthodes retourPasse() qui appelle la commande Annuler, retourFutur() qui appelle la comamande Retablir. Pour cela rien de plus simple, nous recréons des attributs curseur et texte dans la Snapshot, similaires à ceux de l'éditeur qui auront valeur de l'état présent lorsque la méthode sauvegarde() de Mémoire est appelée.
+Nous pouvons récupérer ces champs facilement avec les méthodes getTexte() et getCurseur(), ainsi que cloner la Snapshot avec clone() afin de renvoyer une Snapshot équivalente à celle-ci, utile afin de copier des Snapshot d'une Stack à l'autre de la Memoire. 
+  
+## ➤ Commande
+  
+Pour cette version 2, il a fallu adapter le système de commande à nos nouveaux besoins en conservant l'ancienne sructure. Pour cela nous avons créé deux nouvelles interfaces : Scriptable et Sauvegardable. Ces nouvelles interfaces permettent de définir lorsqu'une commande peut soit enregistrer dans le script dont nous parlerons pendant les explications) soit qui peut créer une nouvelle Snapshot avec sauvegarde(Snapshot). Lorsqu'une commande possède une version 2, nous avons remplacé dans l'Application sa mention, on ne fait plus new Couper() mais new Couper_2(). Prenons l'exemple de Ecrire_2() elle implémente à la fois Scriptable et Sauvegardable afin de pouvoir appeler script() et sauvegarde() et étend Ecrire donc bénificie toujours de la même exécution, voici son constructeur et sa méthode execute() : 
+```java
+public Ecrire_2(Application application, Editeur editeur, char c) {
+  super(application, editeur, c);
+  script();
+}
+  
+public void execute() {
+  super.execute();
+  sauvegarde();
+}```
+  
+Cependant il fallait bien évidemment adopter ce genre de structure car Annuler et Retablir sont scriptables et peuvent donc être rejouées, mais ne sont cependant pas Sauvegardable au risque d'obtenir une boucle infinie.
+De même pour Enregistrer et RejouerScript qui sont quant à eux ni Sauvegardable ni Scriptable pour éviter une nouvelle fois une boucle infinie.
+
+## ➤ Script
+  
+L'application possède également un unique Script maintenant, qui possède lui-même une infinité de commandes. En effet, le Script est une nouvelle fonctionnalité permettant d'enregistrer toutes les commandes effectuées dans un certain moment défini par l'utilisateur afin de pouvoir les rejouer.
+Ce script possède deux attributs :
+- L'attibut commandes qui est en réalité une List où viendront s'ajouter les commandes une à une lorsque ↲
+- L'attribut registering sera à true ! En effet cet attribut permet de savoir si le script enregistre ou si il est stoppé.
+Ces deux attributs sont récuparables via les méthodes getCommandes() et isRegistering().
+Finalement, à la création d'une commande qui implémente Scriptable, nous appelons sa méthode Script, si le script enregistre (qui est activé par un execute de la commande EnregistrerScript) alors elle est ajoutée à la file du Script sinon il ne se passe rien. Lorsque la commande EnregistrerScript() est effectuée de nouveau elle coupe l'enregistrement, nous utilisons alors la méthode setRegistering(boolean) qui indique que l'enregistrement a stoppé.
+Quand cet enregistrement a cessé, nous avons alors une liste d'actions en attente qu'il est possible de rejouer à n'importe quel moment et n'importe où dans notre buffer avec la nouvelle commande RejouerScript(), et ce, autant de fois que nous le voulons.
