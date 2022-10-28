@@ -70,7 +70,8 @@ public Ecrire_2(Application application, Editeur editeur, char c) {
 public void execute() {
   super.execute();
   sauvegarde();
-}```
+}
+```
   
 Cependant il fallait bien évidemment adopter ce genre de structure car Annuler et Retablir sont scriptables et peuvent donc être rejouées, mais ne sont cependant pas Sauvegardable au risque d'obtenir une boucle infinie.
 De même pour Enregistrer et RejouerScript qui sont quant à eux ni Sauvegardable ni Scriptable pour éviter une nouvelle fois une boucle infinie.
