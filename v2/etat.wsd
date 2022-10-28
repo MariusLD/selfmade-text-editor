@@ -24,12 +24,3 @@ f3 -down-> f4 : autre / récupération commande associée
 f4 --> commande : commande récupérée / exécution
 f4 --> commande : null / rien
 @enduml
-
-@startuml etat_fenetre
-state "Teinte curseur/selection grise" as gris
-state "Teinte curseur/selection rouge" as rouge
-
-[*] -> gris
-gris --> rouge : enregistrement script
-rouge -> gris : fin enregistrement script
-@enduml

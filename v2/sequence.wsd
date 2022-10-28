@@ -1,0 +1,114 @@
+@startuml sequence_ecriture
+actor Utilisateur as U
+participant InputActionneur as In
+participant Application as App
+participant Ecrire_2 as Ecr
+participant Script as Sc
+participant Editeur as Ed
+participant Snapshot as Snap
+participant Memoire as M
+participant Fenetre as Fen
+
+activate U
+U --> In : appuie sur la touche 'a'
+activate In
+In --> App : ecrit('a')
+activate App
+App --> Ecr : new Ecrire_2('a')
+activate Ecr
+Ecr --> Ecr : script()
+activate Ecr
+Ecr --> Sc : isRegistering()
+activate Sc
+alt false
+Ecr --> Ecr : rien
+else true
+Ecr --> Sc : enregistrer(this)
+end
+deactivate Sc
+deactivate Ecr
+App --> Ecr : execute()
+Ecr --> Ed : writeChar('a')
+activate Ed
+Ed --> Ed : ajoute 'a' au texte
+Ed --> Ed : avance le curseur
+Ecr --> Ecr : sauvegarde()
+activate Ecr
+Ecr --> Ed : snap = createSnapshot()
+Ed --> Snap : new Snapshot(texte, curseur)
+activate Snap
+deactivate Snap
+Ed --> Ecr : retourne la snapshot
+Ecr --> M : sauvegarde(snap)
+deactivate Ecr
+deactivate Ecr
+activate M
+M --> M : passe.push(present.clone())
+M --> M : present = snap
+M --> M : future.clear()
+App --> Fen : refreshText()
+deactivate M
+activate Fen
+Fen --> Fen : refreshCursorHighlight()
+Fen --> Fen : refreshSelectionHighlight()
+Fen --> U : affiche le texte et le curseur
+@enduml
+
+@startuml sequence_commande
+actor Utilisateur as U
+participant InputActionneur as In
+participant CommandeActionneur as Cmd
+participant Fenetre as Fen
+participant Application as App
+participant Annuler as An
+participant Script as Sc
+participant Memoire as M
+participant Editeur as Ed
+participant Snapshot as Snap
+activate U
+U --> In : appuie sur la touche Échap
+activate In
+In --> In : changeActionneur(\n\tnew CommandeActionneur()\n)
+activate In
+In --> Cmd : cmd = new CommandeActionneur()
+activate Cmd
+In --> Fen : setActionneur(cmd)
+activate Fen
+deactivate In
+deactivate In
+U --> Cmd : appuie sur la touche 'z'
+Cmd --> App : getCommande('z')
+activate App
+App --> An : new Annuler() 
+activate An
+An --> An : script()
+activate An
+An --> Sc : isRegistering()
+activate Sc
+alt false
+An --> An : rien
+else true
+An --> Sc : enregistrer(this)
+end
+deactivate Sc
+deactivate An
+App --> Cmd : retourne l'instance d'Annuler
+Cmd --> An : execute()
+An --> M : snap = retourPasse()
+activate M
+M --> M : future.push(present.clone())
+M --> M : present = passe.pop()
+M --> An : retourne present.clone()
+deactivate M
+An --> Ed : restoreSnapshot(snap)
+activate Ed
+Ed --> Snap : getText()
+activate Snap
+Ed --> Snap : getCurseur()
+deactivate Snap
+deactivate An
+Cmd --> Fen : refreshText()
+activate Fen
+Fen --> Fen : refreshCursorHighlight()
+Fen --> U : affiche le texte et le curseur
+@enduml

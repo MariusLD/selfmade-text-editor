@@ -1,0 +1,82 @@
+@startuml sequence_ecriture
+actor Utilisateur as U
+participant InputActionneur as In
+participant Application as App
+participant Ecrire as Ecr
+participant Editeur as Ed
+participant Fenetre as Fen
+
+activate U
+U --> In : appuie sur la touche 'a'
+activate In
+In --> App : ecrit('a')
+activate App
+App --> Ecr : new Ecrire('a')
+activate Ecr
+App --> Ecr : execute()
+Ecr --> Ed : writeChar('a')
+activate Ed
+deactivate Ecr
+Ed --> Ed : ajoute 'a' au texte
+Ed --> Ed : avance le curseur
+App --> Fen : refreshText()
+activate Fen
+Fen --> Fen : refreshCursorHighlight()
+Fen --> U : affiche le texte et le curseur
+@enduml
+
+@startuml sequence_commande
+actor Utilisateur as U
+participant InputActionneur as In
+participant CommandeActionneur as Cmd
+participant Fenetre as Fen
+participant Application as App
+participant DeplacerSelection as DS
+participant Editeur as Ed
+participant Selection as Sel
+participant Couper as Cou
+activate U
+U --> In : appuie sur la touche Échap
+activate In
+In --> In : changeActionneur(\n\tnew CommandeActionneur()\n)
+activate In
+In --> Cmd : cmd = new CommandeActionneur()
+activate Cmd
+In --> Fen : setActionneur(cmd)
+activate Fen
+deactivate In
+deactivate In
+U --> Cmd : appuie sur la flèche gauche
+Cmd --> App : deplaceSelection(Direction.GAUCHE)
+activate App
+App --> DS : new DeplacerSelection(Direction.GAUCHE)
+activate DS
+App --> DS : execute()
+DS --> Ed : moveSelection(Direction.GAUCHE)
+activate Ed
+deactivate DS
+Ed --> Sel : off = getOffset()
+activate Sel
+Ed --> Sel : setOffset(off- 1)
+deactivate Sel
+App --> Fen : refreshSelectionHighlight()
+Fen --> U : affiche la sélection
+U --> Cmd : appuie sur la touche 'x'
+Cmd --> App : getCommande('x')
+App --> Cou : new Couper() 
+activate Cou
+App --> Cmd : retourne l'instance de Couper
+Cmd --> Cou : execute()
+Cou --> Ed : getSelectedText()
+Cou --> App : setClipboard(texte)
+Cou --> Ed : removeSelectedText()
+Cou --> Ed : resetSelection()
+Ed --> Sel : setOffset(0)
+activate Sel
+deactivate Sel
+deactivate Cou
+Cmd --> Fen : refreshText()
+activate Fen
+Fen --> Fen : refreshCursorHighlight()
+Fen --> U : affiche le texte et le curseur
+@enduml

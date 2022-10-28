@@ -196,6 +196,9 @@ DeplacerCurseur -->"1" Direction
 DeplacerSelection -->"1" Direction
 Supprimer -->"1" Direction
 
+InputActionneur -- Direction : > determine la direction de déplacement du curseur
+CommandeActionneur -- Direction : > determine la direction de déplacement de la sélection
+
 Commande <|-- Copier
 Commande <|-- Couper
 Commande <|-- Coller
